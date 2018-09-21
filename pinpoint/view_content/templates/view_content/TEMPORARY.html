@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pinpoint</title>
+</head>
+<body>
+    {% for post in object_list %}
+        <span>{{ post.date|date:"d.m.Y" }}: </span>
+        <a href="/view_content/{{ post.id }}">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
+        <p>{{ post.body }}</p>
+    {% endfor %}
+</body>
+</html>
