@@ -5,7 +5,15 @@
     <title>Pinpoint</title>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    <h1>Pinpoint</h1>
+    <a href="/accounts/login/">log in</a><span> - </span>
+    <a href="/accounts/register/">register</a><span> - </span>
+    <a href="/">content</a><span> - </span>
+    <a href="/accounts/logout/">log out</a>
+    <hr>
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>
 </html>

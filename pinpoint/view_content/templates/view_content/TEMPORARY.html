@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-    {% for post in object_list %}
+    {% for post in posts %}
         <span>{{ post.date|date:"d.m.Y" }}: </span>
-        <a href="/view_content/{{ post.id }}">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
+        <a href="">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
         <p>{{ post.body }}</p>
     {% endfor %}
+    <hr>
+    <div>Logged in as {{ user.username }}</div>
 {% endblock %}
