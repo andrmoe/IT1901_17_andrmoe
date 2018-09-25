@@ -5,7 +5,7 @@ from .forms import PostForm
 
 def index(request):
     posts = Post.objects.all().order_by("-date")[:20]
-    return render(request, "view_content/TEMPORARY.html", {'posts': posts, 'user': request.user})
+    return render(request, "view_content/TEMPORARY.html", {'posts': posts})
 
 
 def create_content(request):
