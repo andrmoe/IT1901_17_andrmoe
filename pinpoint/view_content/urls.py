@@ -4,6 +4,6 @@ from django.views.generic.list import ListView
 
 
 urlpatterns = [
-    path('', views.index),
+    path('', views.index, name='home'),
 
 ]
