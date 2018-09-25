@@ -1,7 +1,6 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 
 
 def register(request):
@@ -19,5 +18,10 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-def welcome(request):
-    return HttpResponse("<h1>Hey " + request.user.username + "!</h1>")
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+
+def profile(request):
+    return redirect("/")
