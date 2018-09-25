@@ -5,5 +5,5 @@ from django.views.generic.list import ListView
 
 urlpatterns = [
     path('', views.index),
-
+    path('create/', views.create_content),
 ]
