@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
     {% for post in posts %}
-        <span>{{ post.date|date:"d.m.Y" }}: </span>
-        <a href="">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
-        <p>{{ post.body }}</p>
+        {% if post.published %}
+            <span>{{ post.date|date:"d.m.Y" }}: </span>
+            <a href="">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
+            <p>{{ post.body }}</p>
+        {% endif %}
     {% endfor %}
     <hr>
     <div>Logged in as {{ user.username }}</div>
