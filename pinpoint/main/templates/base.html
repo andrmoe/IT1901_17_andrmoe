@@ -10,6 +10,7 @@
     <title>{% block title %}title{% endblock %}</title>
     <style>
     <style>
+    
     textarea{
       border-radius: 10px;
       height: 25%;
@@ -48,14 +49,14 @@
           <a class="nav-link" href="{% url 'home' %}">Home</a>
         </li>
         {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'content' %}">Create Content</a>
+        </li>
         {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register' %}">Register</a>
         </li>
         {% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'content' %}">Content</a>
-        </li>
         </ul>
         <ul class="navbar-nav justify-content-end">
         {% if request.user.is_authenticated %}
