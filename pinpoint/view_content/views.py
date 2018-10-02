@@ -9,13 +9,14 @@ def index(request):
 
 
 def create_content(request):
+    post = Post.objects.get(pk=2)
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return redirect("/")
     else:
-        form = PostForm()
+        form = PostForm(initial=post.__dict__)
 
     return render(request, "view_content/create.html", {'form': form})
 
