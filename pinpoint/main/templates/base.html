@@ -9,10 +9,30 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>{% block title %}title{% endblock %}</title>
     <style>
-    html {
-      font-family: Verdana;
+    <style>
+    textarea{
+      border-radius: 10px;
+      height: 25%;
+      width: 100%;
+      padding:20px;
     }
-    </style>
+
+    input[type="text"], input[type="password"] {
+      border-radius: 10px;
+      height: 30px;
+    }
+    select{
+      border-radius: 10px;
+      height:30px;
+    }
+
+    button{
+      height: 30px;
+      width: 200px;
+
+    }
+
+  </style>
   </head>
   <body>
   <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
@@ -52,7 +72,7 @@
     </div>
   </nav>
   <br>
-  <div class="container">
+  <div class="container" style="border: 2px solid black; border-radius: 20px; padding: 20px;">
     {% block content %}
     {% endblock %}
   </div>
