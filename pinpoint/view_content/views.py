@@ -10,7 +10,7 @@ def index(request):
 
 
 def create_content(request):
-    post = Post.objects.get(pk=2)
+    post = Post(author=request.user)
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
