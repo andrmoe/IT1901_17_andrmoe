@@ -5,8 +5,8 @@
     {% for post in posts %}
         {% if post.published %}
             <span>{{ post.date|date:"d.m.Y" }}: </span>
-            <a href="">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
-            <p>{{ post.body }}</p>
+            <a href="{% url 'detail' post.id %}">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
+            <p></p>
         {% endif %}
     {% endfor %}
     <hr>
