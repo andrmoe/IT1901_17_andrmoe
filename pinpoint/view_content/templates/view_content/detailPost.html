@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>{{ post.title }} - {{ post.date }}</h1>
-<h2>Author - {{ post.author }}</h2>
+<h2>{{ post.title }} - {{ post.date }}</h2>
+<h3>Author - {{ post.author }}</h3>
 <p>{{ post.body }}</p>
 
 {% if error_message %}
