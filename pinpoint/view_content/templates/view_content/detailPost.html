@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>{{ post.title }} - {{ post.date }}</h1>
+<h2>Author - {{ post.author }}</h2>
+<p>{{ post.body }}</p>
+
+{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+{% endblock %}
+
