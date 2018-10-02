@@ -23,5 +23,9 @@ def logout_view(request):
     return redirect('/')
 
 
+def welcome(request):
+    return redirect("/accounts/profile")
+
+
 def profile(request):
     return redirect("/")
