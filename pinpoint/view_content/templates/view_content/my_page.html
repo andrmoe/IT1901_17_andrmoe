@@ -3,27 +3,32 @@
 {% block content %}
 	<h2>My Page</h2>
 
-
-
 	{% if posts %}
-	<h2>My Posts</h2>
-	<ul>
+	<h4>My Posts</h4>
+	<table>
+	<tr><th>Posts</th><th>Author</th></tr>
  		{% for post in posts %}
-	<li>
-		 <a href="/{{ post.id }}">{{ post.title }}</a> ({{post.author}})
-	</li>
+	<tr>
+		 <td><a href="/{{ post.id }}">{{ post.title }}</a></td><td> ({{post.author}})</td>
+	</tr>
  		{% endfor %}
-	</ul>
+	</table>
 {% endif %}
 
 {% if needs_proofreading %}
-<h2>Needs Proofreading</h2>
-<ul>
+<h4>Needs Proofreading</h4>
+<table>
+<tr>
+	<th>Posts</th><th>Author</th><th>Editor</th>
+</tr>
 	{% for post in needs_proofreading %}
-<li>
-	 <a href="/{{ post.id }}">{{ post.title }}</a> ({{post.author}})
-</li>
+<tr>
+	 <td><a href="edit/{{ post.id }}">{{ post.title }}</a></td><td>({{post.author}})</td><td>
+	 	<button onclick="#">Assign</button>
+	</button>
+</tr>
 	{% endfor %}
-</ul>
+</table>
 {% endif %}
 {% endblock %}
+
