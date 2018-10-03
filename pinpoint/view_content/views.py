@@ -25,4 +25,5 @@ def detailPost(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'view_content/detailPost.html', {'post':post})
 def my_page(request):
-    return render(request, "view_content/my_page.html")
+    posts = Post.objects.filter(author=request.user)
+    return render(request, "view_content/my_page.html", {'posts':posts})
