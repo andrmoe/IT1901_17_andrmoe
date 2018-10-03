@@ -6,30 +6,24 @@
 
 
 	{% if posts %}
-	<h4>My Posts</h4>
-	<table>
-	<tr><th>Posts</th><th>Author</th></tr>
+	<h2>My Posts</h2>
+	<ul>
  		{% for post in posts %}
-	<tr>
-		 <td><a href="/{{ post.id }}">{{ post.title }}</a></td><td> ({{post.author}})</td>
-	</tr>
+	<li>
+		 <a href="/{{ post.id }}">{{ post.title }}</a> ({{post.author}})
+	</li>
  		{% endfor %}
-	</table>
+	</ul>
 {% endif %}
 
 {% if needs_proofreading %}
-<h4>Needs Proofreading</h4>
-<table>
-<tr>
-	<th>Posts</th><th>Author</th><th>Editor</th>
-</tr>
+<h2>Needs Proofreading</h2>
+<ul>
 	{% for post in needs_proofreading %}
-<tr>
-	 <td><a href="edit/{{ post.id }}">{{ post.title }}</a></td><td>({{post.author}})</td><td>
-	 	<button onclick="#">Assign</button>
-	</button>
-</tr>
+<li>
+	 <a href="/{{ post.id }}">{{ post.title }}</a> ({{post.author}})
+</li>
 	{% endfor %}
-</table>
+</ul>
 {% endif %}
 {% endblock %}
