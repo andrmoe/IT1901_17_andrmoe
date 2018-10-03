@@ -26,4 +26,5 @@ def detailPost(request, post_id ):
     return render(request, 'view_content/detailPost.html', {'post':post})
 def my_page(request):
     posts = Post.objects.filter(author=request.user)
-    return render(request, "view_content/my_page.html", {'posts':posts})
+    needs_proofreading = Post.objects.filter(proof_read=False)
+    return render(request, "view_content/my_page.html", {'posts':posts , 'needs_proofreading':needs_proofreading})
