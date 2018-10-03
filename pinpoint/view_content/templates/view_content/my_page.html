@@ -3,4 +3,27 @@
 {% block content %}
 	<h2>My Page</h2>
 
+
+
+	{% if posts %}
+	<h2>My Posts</h2>
+	<ul>
+ 		{% for post in posts %}
+	<li>
+		 <a href="/{{ post.id }}">{{ post.title }}</a> ({{post.author}})
+	</li>
+ 		{% endfor %}
+	</ul>
+{% endif %}
+
+{% if needs_proofreading %}
+<h2>Needs Proofreading</h2>
+<ul>
+	{% for post in needs_proofreading %}
+<li>
+	 <a href="/{{ post.id }}">{{ post.title }}</a> ({{post.author}})
+</li>
+	{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
