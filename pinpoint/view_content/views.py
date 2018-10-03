@@ -30,12 +30,12 @@ def detailPost(request, post_id ):
 def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if post.author != request.user and post.editor != request.user:
-        return redirect("/"+post_id)
+        return redirect("my_page")
     if request.method == 'POST':
         form = EditForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect("/my_page/")
     else:
         form = EditForm(initial=post.__dict__)
 
