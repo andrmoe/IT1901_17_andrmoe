@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
-from .forms import PostForm
+from .forms import PostForm, EditForm
 
 
 def index(request):
@@ -21,9 +21,25 @@ def create_content(request):
 
     return render(request, "view_content/create.html", {'form': form})
 
+
 def detailPost(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'view_content/detailPost.html', {'post':post})
+
+
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = EditForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    else:
+        form = EditForm(initial=post.__dict__)
+
+    return render(request, "view_content/edit.html", {'form': form, 'author': post.author})
+
+
 def my_page(request):
     posts = Post.objects.filter(author=request.user)
     needs_proofreading = Post.objects.filter(proof_read=False)
