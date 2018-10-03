@@ -24,3 +24,5 @@ def create_content(request):
 def detailPost(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'view_content/detailPost.html', {'post':post})
+def my_page(request):
+    return render(request, "view_content/my_page.html")

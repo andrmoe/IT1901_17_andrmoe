@@ -10,7 +10,7 @@
     <title>{% block title %}title{% endblock %}</title>
     <style>
     <style>
-    
+
     textarea{
       border-radius: 10px;
       height: 25%;
@@ -60,6 +60,9 @@
         </ul>
         <ul class="navbar-nav justify-content-end">
         {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'my_page' %}">My Page</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
