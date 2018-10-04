@@ -7,7 +7,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='author_of')
     editor = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='editor_of', null=True)
-    proof_read = models.BooleanField(default=False)
+    needs_proofreading = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
 
     def __str__(self):

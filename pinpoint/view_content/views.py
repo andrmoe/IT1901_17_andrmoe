@@ -44,5 +44,5 @@ def edit_post(request, post_id):
 
 def my_page(request):
     posts = Post.objects.filter(author=request.user)
-    needs_proofreading = Post.objects.filter(proof_read=False)
-    return render(request, "view_content/my_page.html", {'posts':posts , 'needs_proofreading':needs_proofreading})
+    needs_proofreading = Post.objects.filter(needs_proofreading=True)
+    return render(request, "view_content/my_page.html", {'posts': posts, 'needs_proofreading': needs_proofreading})
