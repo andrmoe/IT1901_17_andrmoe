@@ -9,7 +9,7 @@
 	<tr><th>Posts</th><th>Author</th></tr>
  		{% for post in posts %}
 	<tr>
-		 <td><a href="/{{ post.id }}">{{ post.title }}</a></td><td> ({{post.author}})</td>
+		 <td><a href="/edit/{{ post.id }}">{{ post.title }}</a></td><td> ({{post.author}})</td>
 	</tr>
  		{% endfor %}
 	</table>
@@ -23,7 +23,7 @@
 </tr>
 	{% for post in needs_proofreading %}
 <tr>
-	 <td><a href="../edit/{{ post.id }}">{{ post.title }}</a></td><td>({{post.author}})</td><td>
+	 <td><a href="/edit/{{ post.id }}">{{ post.title }}</a></td><td>({{post.author}})</td><td>
 	 	<button onclick="#">Assign</button>
 	</button>
 </tr>
