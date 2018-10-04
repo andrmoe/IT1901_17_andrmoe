@@ -2,7 +2,7 @@
 {% block title %}My Page{% endblock %}
 {% block content %}
 	<h2>My Page</h2>
-
+	<br>
 	{% if posts %}
 	<h4>My Posts</h4>
 	<table>
@@ -16,17 +16,26 @@
 {% endif %}
 
 {% if needs_proofreading %}
+<br>
 <h4>Needs Proofreading</h4>
 <table>
 <tr>
 	<th>Posts</th><th>Author</th><th>Editor</th>
 </tr>
 	{% for post in needs_proofreading %}
-<tr>
-	 <td><a href="/edit/{{ post.id }}">{{ post.title }}</a></td><td>({{post.author}})</td><td>
-	 	<button onclick="#">Assign</button>
-	</button>
-</tr>
+		<tr>
+			 <td>
+				 <a href="/edit/{{ post.id }}">{{ post.title }}</a>
+			 </td>
+			<td>({{post.author}})</td>
+			<td>
+				{% if post.editor is None %}
+				<button onclick="#">Assign to self</button>
+				{% else %}
+				<center>{{ post.editor }}</center>
+				{% endif %}
+			</td>
+		</tr>
 	{% endfor %}
 </table>
 {% endif %}
