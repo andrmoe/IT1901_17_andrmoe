@@ -29,8 +29,10 @@
 			 </td>
 			<td>({{post.author}})</td>
 			<td>
-				{% if post.editor is None %}
+				{% if post.editor is None and is_editor %}
 				<a href="/assign/{{ post.id }}"><button onclick="#">Assign to self</button></a>
+				{% elif post.editor is None %}
+				<div></div>
 				{% else %}
 				<center>{{ post.editor }}</center>
 				{% endif %}
