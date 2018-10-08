@@ -46,3 +46,11 @@ def my_page(request):
     posts = Post.objects.filter(author=request.user)
     needs_proofreading = Post.objects.filter(needs_proofreading=True)
     return render(request, "view_content/my_page.html", {'posts': posts, 'needs_proofreading': needs_proofreading})
+
+
+def assign_post_editor_to_logged_in_user(request, post_id):
+    # TODO check if user is editor and logged in
+    post = Post.objects.get(id=post_id)
+    post.editor = request.user
+    post.save()
+    return redirect("/my_page/")
