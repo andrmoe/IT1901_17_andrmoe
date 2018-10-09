@@ -3,8 +3,8 @@ from django.forms import Textarea
 from .models import Post
 
 
-PostForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading'],
+AuthorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading'],
                              widgets={'body': Textarea(attrs={'cols': 100, 'rows': 25})})
 
-EditForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading', 'published'],
+EditorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading', 'published', 'comment'],
                              widgets={'body': Textarea(attrs={'cols': 100, 'rows': 25})})

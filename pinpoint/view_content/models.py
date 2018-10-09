@@ -9,6 +9,7 @@ class Post(models.Model):
     editor = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='editor_of', null=True)
     needs_proofreading = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
+    comment = models.TextField(null=True)
 
     def __str__(self):
         return self.title

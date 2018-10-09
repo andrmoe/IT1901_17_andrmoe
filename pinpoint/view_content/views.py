@@ -1,12 +1,14 @@
-from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
-from .forms import PostForm, EditForm
-from django.contrib.auth.models import Group
+from .forms import AuthorForm, EditorForm
 
 
 def is_editor(user):
     return user.groups.filter(name='editor').exists()
+
+
+def is_author(user):
+    return user.groups.filter(name='author').exists()
 
 
 def index(request):
@@ -15,36 +17,47 @@ def index(request):
 
 
 def create_content(request):
+    if not is_author(request.user):
+        return redirect("/")
     post = Post(author=request.user)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = AuthorForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return redirect("/")
     else:
-        form = PostForm(initial=post.__dict__)
+        form = AuthorForm(initial=post.__dict__)
 
     return render(request, "view_content/create.html", {'form': form})
 
 
 def detailPost(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'view_content/detailPost.html', {'post':post})
+    return render(request, 'view_content/detailPost.html', {'post': post})
 
 
 def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if post.author != request.user and post.editor != request.user:
-        return redirect("/my_page/")
+    I_am_the_author = post.author == request.user
     if request.method == 'POST':
-        form = EditForm(request.POST, instance=post)
+        if post.editor == request.user:
+            form = EditorForm(request.POST, instance=post)
+        elif post.author == request.user:
+            form = AuthorForm(request.POST, instance=post)
+        else:
+            return redirect("/my_page/")
         if form.is_valid():
             form.save()
             return redirect("/my_page/")
     else:
-        form = EditForm(initial=post.__dict__)
+        if post.editor == request.user:
+            form = EditorForm(initial=post.__dict__)
+        elif post.author == request.user:
+            form = AuthorForm(initial=post.__dict__)
+        else:
+            return redirect("/my_page/")
 
-    return render(request, "view_content/edit.html", {'form': form, 'author': post.author})
+    return render(request, "view_content/edit.html", {'form': form, 'I_am_the_author': I_am_the_author, 'post': post})
 
 
 def my_page(request):
