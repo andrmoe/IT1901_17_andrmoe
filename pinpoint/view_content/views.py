@@ -8,7 +8,7 @@ def is_editor(user):
 
 
 def is_author(user):
-    return user.groups.filter(name='author').exists()
+    return user.groups.filter(name='authors').exists()
 
 
 def index(request):
