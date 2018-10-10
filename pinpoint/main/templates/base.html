@@ -67,11 +67,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'my_page' %}">My Page</a>
         </li>
-        <li class="btn btn-secondary btn-sm">
+        <li class="btn btn-primary btn-sm">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         {% else %}
-        <li class="btn btn-secondary btn-sm">
+        <li class="btn btn-primary btn-sm">
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
         {% endif %}
