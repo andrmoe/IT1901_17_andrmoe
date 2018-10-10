@@ -33,6 +33,10 @@
 
     }
 
+    .pointer{
+      cursor: pointer;
+    }
+
   </style>
   </head>
   <body>
@@ -63,11 +67,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'my_page' %}">My Page</a>
         </li>
-        <li class="nav-item">
+        <li class="btn btn-secondary">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         {% else %}
-        <li class="nav-item">
+        <li class="btn btn-secondary">
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
         {% endif %}
@@ -76,7 +80,7 @@
     </div>
   </nav>
   <br>
-  <div class="container" style="border: 2px solid black; border-radius: 20px; padding: 20px;">
+  <div class="shadow-lg p-3 mb-5 bg-white rounded" style="padding: 20px; width: 70%; margin: auto; margin-top: 20px;">
     {% block content %}
     {% endblock %}
   </div>
