@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Category
+from django.contrib.auth.models import User
 from .forms import AuthorForm, EditorForm
 
 
@@ -9,6 +10,19 @@ def is_editor(user):
 
 def is_author(user):
     return user.groups.filter(name='authors').exists()
+
+
+def get_subscribed_content(user):
+    return (Post.objects.filter(author__subscriber__subscriber=user) |
+            Post.objects.filter(categories__subscribers=user)).distinct().order_by('-date')
+
+
+def get_author_subscriptions(user):
+    return User.objects.filter(subscriber__subscriber=user)
+
+
+def get_category_subscriptions(user):
+    return Category.objects.filter(subscribers=user)
 
 
 def index(request):
@@ -62,10 +76,14 @@ def edit_post(request, post_id):
 
 def my_page(request):
     I_am_editor = is_editor(request.user)
+    subscribed_content = get_subscribed_content(request.user)
+    subscriptions = get_author_subscriptions(request.user)
+    subscriptions_cat = get_category_subscriptions(request.user)
     posts = Post.objects.filter(author=request.user)
     needs_proofreading = Post.objects.filter(needs_proofreading=True)
     return render(request, "view_content/my_page.html",
-                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'is_editor': I_am_editor})
+                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'subscribed_content': subscribed_content,
+                   'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat, 'is_editor': I_am_editor})
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
