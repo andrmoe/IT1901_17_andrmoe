@@ -3,7 +3,14 @@
 {% block content %}
   
   <h2>Edit</h2>
-<div>Author: {{ author }}</div><br>
+<div>Author: {{ post.author }}</div><br>
+  {% if I_am_the_author and post.comment %}
+    <div>
+      <h5>Comment from editor ({{ post.editor }}):</h5>
+      <p>{{ post.comment }}</p>
+    </div>
+    <br>
+  {% endif %}
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

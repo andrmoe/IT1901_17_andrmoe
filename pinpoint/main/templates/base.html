@@ -33,6 +33,10 @@
 
     }
 
+    .pointer{
+      cursor: pointer;
+    }
+
   </style>
   </head>
   <body>
@@ -63,11 +67,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'my_page' %}">My Page</a>
         </li>
-        <li class="nav-item">
+        <li class="btn btn-primary btn-sm">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         {% else %}
-        <li class="nav-item">
+        <li class="btn btn-primary btn-sm">
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
         {% endif %}
@@ -76,14 +80,14 @@
     </div>
   </nav>
   <br>
-  <div class="container" style="border: 2px solid black; border-radius: 20px; padding: 20px;">
+  <div class="shadow-lg p-3 mb-5 bg-white rounded" style="padding: 20px; width: 70%; margin: auto; margin-top: 20px;">
     {% block content %}
     {% endblock %}
   </div>
   <center><div> {% if request.user.is_authenticated %}Logged in as {{ request.user }} {% endif %}</div></center>
   <br><br>
   <center><small>Copyright &copy; Pinpoint - All rights Reserved </small></center>
-  <center>Version: 1.0</center>
+  <center>Version: 2.0</center>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
