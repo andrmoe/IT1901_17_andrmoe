@@ -10,5 +10,5 @@ urlpatterns = [
     path('assign/<post_id>', views.assign_post_editor_to_logged_in_user),
     path('my_page/', views.my_page ,name ="my_page"),
     path('<post_id>', views.detailPost, name='detail'),
-
+    path('subscriptions', views.subscriptions, name='subscriptions')
 ]

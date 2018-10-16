@@ -100,3 +100,8 @@ def subscribe_to_author(request, author_id):
         subscription = AuthorSubscription(subscriber=request.user, author=author)
         subscription.save()
     return redirect("subscriptions/")
+
+
+def subscriptions(request):
+    return render(request, "subscriptions", {'subscriptions': get_subscribed_content(request.user)})
+
