@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, AuthorSubscription
 from django.contrib.auth.models import User
 from .forms import AuthorForm, EditorForm
 
@@ -92,3 +92,11 @@ def assign_post_editor_to_logged_in_user(request, post_id):
         post.editor = request.user
         post.save()
     return redirect("/my_page/")
+
+
+def subscribe_to_author(request, author_id):
+    author = User.objects.get(pk=author_id)
+    if is_author(author):
+        subscription = AuthorSubscription(subscriber=request.user, author=author)
+        subscription.save()
+    return redirect("subscriptions/")
