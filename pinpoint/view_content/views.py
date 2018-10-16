@@ -99,9 +99,9 @@ def subscribe_to_author(request, author_id):
     if is_author(author):
         subscription = AuthorSubscription(subscriber=request.user, author=author)
         subscription.save()
-    return redirect("subscriptions/")
+    return redirect("/subscriptions/")
 
 
 def subscriptions(request):
-    return render(request, "subscriptions", {'subscriptions': get_subscribed_content(request.user)})
+    return render(request, "view_content/subscriptions.html", {'subscriptions': get_subscribed_content(request.user)})
 
