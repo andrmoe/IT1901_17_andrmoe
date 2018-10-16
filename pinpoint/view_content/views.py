@@ -92,3 +92,6 @@ def assign_post_editor_to_logged_in_user(request, post_id):
         post.editor = request.user
         post.save()
     return redirect("/my_page/")
+
+def subscriptions(request):
+    return render(request, "subscriptions", {'subscriptions': get_subscribed_content(request.user)}) 
