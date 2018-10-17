@@ -1,15 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Subscriptions{% endblock %}
 {% block content %}
-	<h2>Subscriptions</h2>
+	<h4>Subscriptions</h4>
+	<h6>Authors</h6>
+	{% for author in subscriptions %}
+		<div>{{ author }}</div>
+	{% endfor %}
 	<br>
-	{% if subscriptions %}
-	<h4>Posts</h4>
-	<table>
-	<tr><th>Posts</th><th>Author</th></tr>
-	<tr>
-		
-	</tr>
-	</table>
+	<h6>Categories</h6>
+	{% for cat in subscriptions_cat %}
+		<div>{{ cat }}</div>
+	{% endfor %}
+	<br>
+	{% if subscribed_content %}
+		<table class="table table-hover">
+		<tr><th>Posts</th><th>Author</th></tr>
+	 		{% for post in subscribed_content %}
+				<tr class="pointer" onclick="document.location='/{{ post.id }}'">
+					 <td>{{ post.title }}</td><td> ({{post.author}})</td>
+				</tr>
+	 		{% endfor %}
+		</table>
 	{% endif %}
 {% endblock %}
