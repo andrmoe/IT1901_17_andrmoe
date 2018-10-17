@@ -127,7 +127,6 @@ def subscribe_to_author(request, author_id):
 
 
 def subscriptions(request):
-    print(request.user)
     if not request.user.is_authenticated:
         return redirect('/')
     subscribed_content = get_subscribed_content(request.user)
