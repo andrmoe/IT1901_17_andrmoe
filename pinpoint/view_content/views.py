@@ -117,5 +117,9 @@ def subscribe_to_author(request, author_id):
 
 
 def subscriptions(request):
-    return render(request, "view_content/subscriptions.html", {'subscriptions': get_subscribed_content(request.user)})
+    subscribed_content = get_subscribed_content(request.user)
+    subscriptions = get_author_subscriptions(request.user)
+    subscriptions_cat = get_category_subscriptions(request.user)
+    return render(request, "view_content/subscriptions.html", {'subscribed_content': subscribed_content,
+                   'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat})
 
