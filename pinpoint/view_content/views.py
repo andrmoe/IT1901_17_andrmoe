@@ -5,24 +5,38 @@ from .forms import AuthorForm, EditorForm
 
 
 def is_editor(user):
-    return user.groups.filter(name='editor').exists()
+    if user.is_authenticated():
+        return user.groups.filter(name='editor').exists()
+    else:
+        return False
 
 
 def is_author(user):
-    return user.groups.filter(name='authors').exists()
+    if user.is_authenticated():
+        return user.groups.filter(name='authors').exists()
+    else: return False
 
 
 def get_subscribed_content(user):
-    return (Post.objects.filter(author__subscriber__subscriber=user) |
-            Post.objects.filter(categories__subscribers=user)).distinct().order_by('-date')
+    if user.is_authenticated():
+        return (Post.objects.filter(author__subscriber__subscriber=user) |
+                Post.objects.filter(categories__subscribers=user)).distinct().order_by('-date')
+    else:
+        return Post.objects.none()
 
 
 def get_author_subscriptions(user):
-    return User.objects.filter(subscriber__subscriber=user)
+    if user.is_authenticated():
+        return User.objects.filter(subscriber__subscriber=user)
+    else:
+        return User.objects.none()
 
 
 def get_category_subscriptions(user):
-    return Category.objects.filter(subscribers=user)
+    if user.is_authenticated():
+        return Category.objects.filter(subscribers=user)
+    else:
+        return Category.objects.none()
 
 
 def index(request):
