@@ -88,6 +88,7 @@
   <br>
   <div class="shadow-lg p-3 mb-5 bg-white rounded" style="padding: 20px; width: 70%; margin: auto; margin-top: 20px; font-family: 'Spectral', serif;">
     {% block content %}
+
     {% endblock %}
   </div>
   <center><div> {% if request.user.is_authenticated %}Logged in as {{ request.user }} {% endif %}</div></center>
