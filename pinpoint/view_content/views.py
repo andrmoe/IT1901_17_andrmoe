@@ -17,6 +17,10 @@ def is_author(user):
     else: return False
 
 
+def get_group_members(group_name):
+    return User.objects.filter(groups__name=group_name)
+
+
 def get_subscribed_content(user):
     if user.is_authenticated:
         return (Post.objects.filter(author__subscriber__subscriber=user) |
@@ -126,11 +130,24 @@ def subscribe_to_author(request, author_id):
     return redirect("/subscriptions/")
 
 
+def subscribe_to_category(request, category_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    category = Category.objects.get(pk=category_id)
+    category.subscribers.add(request.user)
+    return redirect("/subscriptions/")
+
+
 def subscriptions(request):
     if not request.user.is_authenticated:
         return redirect('/')
     subscribed_content = get_subscribed_content(request.user)
     subscriptions = get_author_subscriptions(request.user)
     subscriptions_cat = get_category_subscriptions(request.user)
+    not_subscribed_authors = get_group_members("authors").difference(subscriptions)
+    not_subscribed_categories = Category.objects.all().difference(subscriptions_cat)
     return render(request, "view_content/subscriptions.html", {'subscribed_content': subscribed_content,
-                   'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat})
+                                                               'subscriptions': subscriptions,
+                                                               'subscriptions_cat': subscriptions_cat,
+                                                               'not_subscribed_authors': not_subscribed_authors,
+                                                               'not_subscribed_categories': not_subscribed_categories})

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Subscriptions{% endblock %}
 {% block content %}
-	<h4>Subscriptions</h4>
+	<h2>Subscriptions</h2>
 	<h6><b>Authors</b></h6>
 	{% for author in subscriptions %}
 		<div>{{ author }}</div>
@@ -22,4 +22,46 @@
 	 		{% endfor %}
 		</table>
 	{% endif %}
+{% if not_subscribed_authors %}
+<br>
+
+<h2>Other</h2>
+<table class="table table-hover">
+	<tr>
+		<th>Author</th>
+	</tr>
+	{% for author in not_subscribed_authors %}
+		<tr>
+			 <td>
+				 {{ author }}
+			 </td>
+			<td>
+				<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/subscribe_author/{{ author.id }}'">
+					Subscribe
+				</button>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+{% endif %}
+
+{% if not_subscribed_categories %}
+<table class="table table-hover">
+	<tr>
+		<th>Category</th>
+	</tr>
+	{% for category in not_subscribed_categories %}
+		<tr>
+			 <td>
+				 {{ category }}
+			 </td>
+			<td>
+				<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/subscribe_category/{{ category.id }}'">
+					Subscribe
+				</button>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+{% endif %}
 {% endblock %}
