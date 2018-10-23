@@ -86,10 +86,12 @@ def edit_post(request, post_id):
             form.save()
             return redirect("/my_page/")
     else:
+        initial = post.__dict__
+        initial['categories'] = [category.id for category in post.categories.all()]
         if post.editor == request.user:
-            form = EditorForm(initial=post.__dict__)
+            form = EditorForm(initial=initial)
         elif post.author == request.user:
-            form = AuthorForm(initial=post.__dict__)
+            form = AuthorForm(initial=initial)
         else:
             return redirect("/my_page/")
 
