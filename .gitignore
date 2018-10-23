@@ -1,7 +1,7 @@
 
 # Created by https://www.gitignore.io/api/django
 # Byte-compiled / optimized / DLL files
-view_content/migrations/__pycache__/
+ pinpoint/view_content/migrations/__pycache__/
 *.py[cod]
 *$py.class
 
