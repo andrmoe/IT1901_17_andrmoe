@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/django
 # Byte-compiled / optimized / DLL files
  pinpoint/view_content/migrations/__pycache__/
@@ -15,6 +14,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/workspace.xml
 
 # Generated files
 .idea/**/contentModel.xml
