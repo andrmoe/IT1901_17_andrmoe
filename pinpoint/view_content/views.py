@@ -1,28 +1,46 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, AuthorSubscription
 from django.contrib.auth.models import User
 from .forms import AuthorForm, EditorForm
 
 
 def is_editor(user):
-    return user.groups.filter(name='editor').exists()
+    if user.is_authenticated:
+        return user.groups.filter(name='editor').exists()
+    else:
+        return False
 
 
 def is_author(user):
-    return user.groups.filter(name='authors').exists()
+    if user.is_authenticated:
+        return user.groups.filter(name='authors').exists()
+    else: return False
+
+
+def get_group_members(group_name):
+    return User.objects.filter(groups__name=group_name)
 
 
 def get_subscribed_content(user):
-    return (Post.objects.filter(author__subscriber__subscriber=user) |
-            Post.objects.filter(categories__subscribers=user)).distinct().order_by('-date')
+    if user.is_authenticated:
+        return (Post.objects.filter(author__subscriber__subscriber=user) |
+                Post.objects.filter(categories__subscribers=user)).distinct().order_by('-date')
+    else:
+        return Post.objects.none()
 
 
 def get_author_subscriptions(user):
-    return User.objects.filter(subscriber__subscriber=user)
+    if user.is_authenticated:
+        return User.objects.filter(subscriber__subscriber=user)
+    else:
+        return User.objects.none()
 
 
 def get_category_subscriptions(user):
-    return Category.objects.filter(subscribers=user)
+    if user.is_authenticated:
+        return Category.objects.filter(subscribers=user)
+    else:
+        return Category.objects.none()
 
 
 def index(request):
@@ -31,6 +49,8 @@ def index(request):
 
 
 def create_content(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
     if not is_author(request.user):
         return redirect("/")
     post = Post(author=request.user)
@@ -51,6 +71,8 @@ def detailPost(request, post_id ):
 
 
 def edit_post(request, post_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
     post = get_object_or_404(Post, id=post_id)
     I_am_the_author = post.author == request.user
     if request.method == 'POST':
@@ -75,6 +97,8 @@ def edit_post(request, post_id):
 
 
 def my_page(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
     I_am_editor = is_editor(request.user)
     subscribed_content = get_subscribed_content(request.user)
     subscriptions = get_author_subscriptions(request.user)
@@ -87,8 +111,43 @@ def my_page(request):
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
     if is_editor(request.user):
         post = Post.objects.get(id=post_id)
         post.editor = request.user
         post.save()
     return redirect("/my_page/")
+
+
+def subscribe_to_author(request, author_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    author = User.objects.get(pk=author_id)
+    if is_author(author):
+        subscription = AuthorSubscription(subscriber=request.user, author=author)
+        subscription.save()
+    return redirect("/subscriptions/")
+
+
+def subscribe_to_category(request, category_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    category = Category.objects.get(pk=category_id)
+    category.subscribers.add(request.user)
+    return redirect("/subscriptions/")
+
+
+def subscriptions(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    subscribed_content = get_subscribed_content(request.user)
+    subscriptions = get_author_subscriptions(request.user)
+    subscriptions_cat = get_category_subscriptions(request.user)
+    not_subscribed_authors = get_group_members("authors").difference(subscriptions)
+    not_subscribed_categories = Category.objects.all().difference(subscriptions_cat)
+    return render(request, "view_content/subscriptions.html", {'subscribed_content': subscribed_content,
+                                                               'subscriptions': subscriptions,
+                                                               'subscriptions_cat': subscriptions_cat,
+                                                               'not_subscribed_authors': not_subscribed_authors,
+                                                               'not_subscribed_categories': not_subscribed_categories})

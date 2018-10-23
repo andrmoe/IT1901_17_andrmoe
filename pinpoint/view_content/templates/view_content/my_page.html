@@ -15,26 +15,6 @@
 	</table>
 {% endif %}
 
-<!-- TEMPORARY -->
-<h4>Subscriptions</h4>
-{% for author in subscriptions %}
-	<div>{{ author }}</div>
-{% endfor %}
-{% for cat in subscriptions_cat %}
-	<div>{{ cat }}</div>
-{% endfor %}
-{% if posts %}
-	<table class="table table-hover">
-	<tr><th>Posts</th><th>Author</th></tr>
- 		{% for post in subscribed_content %}
-			<tr class="pointer" onclick="document.location='/{{ post.id }}'">
-				 <td>{{ post.title }}</td><td> ({{post.author}})</td>
-			</tr>
- 		{% endfor %}
-	</table>
-{% endif %}
-<!-- /TEMPORARY -->
-
 {% if needs_proofreading and is_editor %}
 <br>
 <h4>Needs Proofreading</h4>

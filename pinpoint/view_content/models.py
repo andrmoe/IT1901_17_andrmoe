@@ -20,6 +20,9 @@ class AuthorSubscription(models.Model):
     subscriber = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='subscribed_to')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='subscriber')
 
+    class Meta:
+        unique_together = ('subscriber', 'author')
+
     def __str__(self):
         return self.subscriber.username + " is subscribed to " + self.author.username
 

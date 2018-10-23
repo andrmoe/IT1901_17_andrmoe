@@ -1,10 +1,30 @@
 {% extends "base.html" %}
-
+{% block title %}Register{% endblock %}
 {% block content %}
   <h2>Register</h2>
-  <form method="post">
+  <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
+    <table class="table">
+    	{% for field in form %}
+    		<tr> 
+    			<td>{{ field.label_tag }}</td>
+    			<td>{{ field }}</td>
+    			
+    			{% if field.help_text %}
+
+    				{% if field.errors %}
+    				<td style="color: red;"><small>
+			        	{{ field.help_text|safe }}  <!-- new code here -->
+			      	</small></td>
+    				{% else %}
+			     	<td><small class="form-text text-muted">
+			        	{{ field.help_text|safe }}  <!-- new code here -->
+			      	</small></td>
+			      	 {% endif %}
+			    {% endif %}
+			</tr>
+		{% endfor %}
+    </table>
+    <button class="btn btn-primary btn-sm" type="submit">Sign up</button>
   </form>
 {% endblock %}
