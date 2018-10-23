@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-	<h2>Posts</h2>
+	<h2>Posts</h2><br>
     {% for post in posts %}
         {% if post.published %}
-            <span>{{ post.date|date:"d.m.Y" }}: </span>
-            <a href="{% url 'detail' post.id %}">{{ post.title }}</a><a href="">   -<i>{{ post.author.username }}</i></a>
-            <p></p>
+        	<div class="pointer" onclick="document.location='{% url 'detail' post.id %}'">
+		    <h4>{{ post.title }}</h4>
+		    <p>{{ post.date|date:"d.m.Y" }}: <a href="">   -<i>{{ post.author.username }}</i></a> </p>
+		  </div>
+            
+            <hr>
         {% endif %}
     {% endfor %}
-    <hr>
 {% endblock %}

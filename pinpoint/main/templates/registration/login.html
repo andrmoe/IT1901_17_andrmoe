@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-
+{% block title %}
+    Log
+{% endblock %}
 {% block content %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+
 
 {% if next %}
     {% if user.is_authenticated %}
@@ -14,10 +14,10 @@
     <p>Please login to see this page.</p>
     {% endif %}
 {% endif %}
-
+<h4>Log in</h4><br>
 <form method="post" action="{% url 'login' %}">
 {% csrf_token %}
-<table>
+<table class="table">
 <tr>
     <td>{{ form.username.label_tag }}</td>
     <td>{{ form.username }}</td>
@@ -27,8 +27,11 @@
     <td>{{ form.password }}</td>
 </tr>
 </table>
-
-<input type="submit" value="login">
+<br>
+{% if form.errors %}
+<p style="color: red;">Your username and password didn't match. Please try again.</p>
+{% endif %}
+<input type="submit" value="login" class="btn btn-primary btn-sm" style="width: 20%;">
 <input type="hidden" name="next" value="{{ next }}">
 </form>
 
