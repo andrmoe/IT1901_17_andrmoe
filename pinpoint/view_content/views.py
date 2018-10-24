@@ -47,7 +47,6 @@ def get_category_subscriptions(user):
 def index(request):
     posts = Post.objects.all()
     query = request.GET.get("q")
-    categories = Category.objects.all()
     if query:
         posts = posts.filter(
                             Q(title__contains=query) |
@@ -55,7 +54,7 @@ def index(request):
                             Q(author__username__contains=query) |
                             Q(categories__name__contains=query)
                             ).distinct()
-    return render(request, "view_content/TEMPORARY.html", {'posts': posts.order_by("-date")[:20], 'cat': categories})
+    return render(request, "view_content/TEMPORARY.html", {'posts': posts.order_by("-date")[:20]})
 
 
 def create_content(request):
