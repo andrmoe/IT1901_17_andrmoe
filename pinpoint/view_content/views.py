@@ -153,3 +153,16 @@ def subscriptions(request):
                                                                'subscriptions_cat': subscriptions_cat,
                                                                'not_subscribed_authors': not_subscribed_authors,
                                                                'not_subscribed_categories': not_subscribed_categories})
+
+
+def confirm_delete(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.user == post.author:
+        return render(request, "view_content/confirm_delete.html", {'post': post})
+
+
+def delete_post(post_id):
+    post = Post.objects.get(id=post_id)
+    if request.user == post.author:
+        post.delete()
+        return render(request, "view_content/my_page.html", {'post': post})
