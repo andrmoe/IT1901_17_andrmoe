@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, AuthorSubscription
 from django.contrib.auth.models import User
+from django.db.models import Q
 from .forms import AuthorForm, EditorForm
 
 
@@ -44,8 +45,17 @@ def get_category_subscriptions(user):
 
 
 def index(request):
-    posts = Post.objects.all().order_by("-date")[:20]
-    return render(request, "view_content/TEMPORARY.html", {'posts': posts})
+    posts = Post.objects.all()
+    query = request.GET.get("q")
+    categories = Category.objects.all()
+    if query:
+        posts = posts.filter(
+                            Q(title__contains=query) |
+                            Q(body__contains=query) |
+                            Q(author__username__contains=query) |
+                            Q(categories__name__contains=query)
+                            ).distinct()
+    return render(request, "view_content/TEMPORARY.html", {'posts': posts.order_by("-date")[:20], 'cat': categories})
 
 
 def create_content(request):
