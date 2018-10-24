@@ -7,8 +7,29 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='author_of')
     editor = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='editor_of', null=True)
-    proof_read = models.BooleanField(default=False)
+    needs_proofreading = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
+    comment = models.TextField(null=True)
+    categories = models.ManyToManyField('Category', null=True)
 
     def __str__(self):
         return self.title
+
+
+class AuthorSubscription(models.Model):
+    subscriber = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='subscribed_to')
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='subscriber')
+
+    class Meta:
+        unique_together = ('subscriber', 'author')
+
+    def __str__(self):
+        return self.subscriber.username + " is subscribed to " + self.author.username
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    subscribers = models.ManyToManyField('auth.User')
+
+    def __str__(self):
+        return self.name
