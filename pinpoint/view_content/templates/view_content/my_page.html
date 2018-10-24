@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block title %}My Page{% endblock %}
 {% block content %}
-	<h2>My Page</h2>
-	<br>
-	{% if posts %}
+<h2>My Page</h2>
+<br>
+{% if posts %}
 	<h4>My Posts</h4>
-	<table>
+	<table class="table table-hover">
 	<tr><th>Posts</th><th>Author</th></tr>
  		{% for post in posts %}
-	<tr>
-		 <td><a href="/edit/{{ post.id }}">{{ post.title }}</a></td><td> ({{post.author}})</td>
+	<tr class="pointer" onclick="document.location='/edit/{{ post.id }}'">
+		 <td>{{ post.title }}</td><td> ({{post.author}})</td>
 	</tr>
  		{% endfor %}
 	</table>
@@ -18,19 +18,19 @@
 {% if needs_proofreading and is_editor %}
 <br>
 <h4>Needs Proofreading</h4>
-<table>
+<table class="table table-hover">
 <tr>
-	<th>Posts</th><th>Author</th><th>Editor</th>
+	<th>Posts</th><th>Author</th><th><center>Editor</center></th>
 </tr>
 	{% for post in needs_proofreading %}
 		<tr>
-			 <td>
-				 <a href="/edit/{{ post.id }}">{{ post.title }}</a>
+			 <td onclick="document.location='/edit/{{ post.id }}'">
+				 {{ post.title }}
 			 </td>
-			<td>({{post.author}})</td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
 			<td>
 				{% if post.editor is None %}
-				<a href="/assign/{{ post.id }}"><button onclick="#">Assign to self</button></a>
+				<center><button class="btn btn-outline-secondary btn-sm" onclick="document.location='/assign/{{ post.id }}'">Assign to self</button></center>
 				{% else %}
 				<center>{{ post.editor }}</center>
 				{% endif %}
