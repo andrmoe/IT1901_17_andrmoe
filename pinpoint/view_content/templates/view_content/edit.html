@@ -16,6 +16,10 @@
     {{ form.as_p }}
     <button type="submit">Save</button>
   </form>
+<br><br>
+<button class="btn btn-outline-secondary btn-sm" onclick="document.location='{{ post.id }}/confirm_delete'">
+  Delete Post
+</button>
 
 
 {% endblock %}

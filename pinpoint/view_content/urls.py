@@ -13,4 +13,6 @@ urlpatterns = [
     path('subscribe_author/<author_id>', views.subscribe_to_author),
     path('subscribe_category/<category_id>', views.subscribe_to_category),
     path('<post_id>', views.detailPost, name='detail'),
+    path('edit/<post_id>/confirm_delete/', views.confirm_delete, name='confirm_delete'),
+    path('edit/<post_id>/delete/', views.delete_post, name='delete'),
 ]
