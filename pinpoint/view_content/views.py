@@ -154,7 +154,6 @@ def subscriptions(request):
                                                                'not_subscribed_authors': not_subscribed_authors,
                                                                'not_subscribed_categories': not_subscribed_categories})
 
-
 def confirm_delete(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.user == post.author:
