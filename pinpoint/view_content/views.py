@@ -17,6 +17,10 @@ def is_author(user):
     else: return False
 
 
+def has_written(author, post):
+    return author in post.author.all()
+
+
 def get_group_members(group_name):
     return User.objects.filter(groups__name=group_name)
 
@@ -53,11 +57,12 @@ def create_content(request):
         return redirect('/')
     if not is_author(request.user):
         return redirect("/")
-    post = Post(author=request.user)
+    post = Post()
     if request.method == 'POST':
         form = AuthorForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
+            post.author.add(request.user)
             return redirect("/")
     else:
         form = AuthorForm(initial=post.__dict__)
@@ -67,18 +72,19 @@ def create_content(request):
 
 def detailPost(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'view_content/detailPost.html', {'post': post})
+    authors = post.author.all()
+    return render(request, 'view_content/detailPost.html', {'post': post, 'authors': authors})
 
 
 def edit_post(request, post_id):
     if not request.user.is_authenticated:
         return redirect('/')
     post = get_object_or_404(Post, id=post_id)
-    I_am_the_author = post.author == request.user
+    I_am_the_author = has_written(request.user, post)
     if request.method == 'POST':
         if post.editor == request.user:
             form = EditorForm(request.POST, instance=post)
-        elif post.author == request.user:
+        elif I_am_the_author:
             form = AuthorForm(request.POST, instance=post)
         else:
             return redirect("/my_page/")
@@ -90,7 +96,7 @@ def edit_post(request, post_id):
         initial['categories'] = [category.id for category in post.categories.all()]
         if post.editor == request.user:
             form = EditorForm(initial=initial)
-        elif post.author == request.user:
+        elif I_am_the_author:
             form = AuthorForm(initial=initial)
         else:
             return redirect("/my_page/")
