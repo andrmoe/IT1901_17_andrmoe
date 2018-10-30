@@ -1,15 +1,31 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-	<h2>Posts</h2><br>
+        <br>
+        <h2>Posts</h2>
+        <form method="GET" action="" class="form-inline">
+            <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search" aria-label="Search" value="{{ request.GET.q }}" autofocus>
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    <br>
+    {% if posts %}
     {% for post in posts %}
         {% if post.published %}
         	<div class="pointer" onclick="document.location='{% url 'detail' post.id %}'">
-		    <h4>{{ post.title }}</h4>
-		    <p>{{ post.date|date:"d.m.Y" }}: <a href="">   -<i>{{ post.author.username }}</i></a> </p>
-		  </div>
-            
+    		    <h4>{{ post.title }}</h4>
+    		    <p>{{ post.date|date:"d.m.Y" }}: <a href="">   -<i>{{ post.author.username }}</i></a> 
+                <small class="form-text text-muted">Categories: |
+                    {% for category in post.categories.all %}
+                        {{ category.name }} |
+                    {% endfor %}
+                </small>
+                </p>
+		  </div> 
             <hr>
         {% endif %}
     {% endfor %}
+    {% else %}
+        <p>Your search did not match any results</p>
+    {% endif %}
+
 {% endblock %}
