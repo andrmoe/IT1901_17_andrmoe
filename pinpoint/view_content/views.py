@@ -2,8 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, AuthorSubscription
 from django.contrib.auth.models import User
 from django.db.models import Q
-from .forms import AuthorForm, EditorForm
+from .forms import AuthorForm, EditorForm, ExEditorForm
 
+
+def is_executive_editor(user):
+    if user.is_authenticated:
+        return user.groups.filter(name='executive editor').exists()
+    else:
+        return False
 
 def is_editor(user):
     if user.is_authenticated:
@@ -90,7 +96,9 @@ def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     I_am_the_author = post.author == request.user
     if request.method == 'POST':
-        if post.editor == request.user:
+        if  is_executive_editor(request.user):
+            form = ExEditorForm(request.POST, instance=post)
+        elif post.editor == request.user:
             form = EditorForm(request.POST, instance=post)
         elif post.author == request.user:
             form = AuthorForm(request.POST, instance=post)
@@ -98,11 +106,16 @@ def edit_post(request, post_id):
             return redirect("/my_page/")
         if form.is_valid():
             form.save()
-            return redirect("/my_page/")
+            if is_executive_editor(request.user):
+                return redirect("/executive_page/")
+            else:
+                return redirect("/my_page/")
     else:
         initial = post.__dict__
         initial['categories'] = [category.id for category in post.categories.all()]
-        if post.editor == request.user:
+        if is_executive_editor(request.user):
+            form = ExEditorForm(initial=initial)
+        elif post.editor == request.user:
             form = EditorForm(initial=initial)
         elif post.author == request.user:
             form = AuthorForm(initial=initial)
@@ -124,6 +137,13 @@ def my_page(request):
     return render(request, "view_content/my_page.html",
                   {'posts': posts, 'needs_proofreading': needs_proofreading, 'subscribed_content': subscribed_content,
                    'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat, 'is_editor': I_am_editor})
+
+def executive_page(request):
+    if not is_executive_editor(request.user):
+        return redirect("/")
+    needs_approval = Post.objects.filter(needs_approval=True)
+    published = Post.objects.filter(published=True)
+    return render(request, "view_content/executive_page.html",{'needs_approval': needs_approval, 'published': published})
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
