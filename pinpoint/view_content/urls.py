@@ -15,4 +15,5 @@ urlpatterns = [
     path('<post_id>', views.detailPost, name='detail'),
     path('edit/<post_id>/confirm_delete/', views.confirm_delete, name='confirm_delete'),
     path('edit/<post_id>/delete/', views.delete_post, name='delete'),
+    path('executive_page/', views.executive_page, name='executive_page')
 ]
