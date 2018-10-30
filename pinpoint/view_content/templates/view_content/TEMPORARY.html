@@ -6,7 +6,10 @@
         {% if post.published %}
         	<div class="pointer" onclick="document.location='{% url 'detail' post.id %}'">
 		    <h4>{{ post.title }}</h4>
-		    <p>{{ post.date|date:"d.m.Y" }}: <a href="">   -<i>{{ post.author.username }}</i></a> </p>
+		    <p>{{ post.date|date:"d.m.Y" }}: -<i>{% for author in post.author.all %}
+                                                                    {{ author.username }},
+                                                                {% endfor %}
+                                                            </i></p>
 		  </div>
             
             <hr>

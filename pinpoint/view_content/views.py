@@ -72,8 +72,7 @@ def create_content(request):
 
 def detailPost(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
-    authors = post.author.all()
-    return render(request, 'view_content/detailPost.html', {'post': post, 'authors': authors})
+    return render(request, 'view_content/detailPost.html', {'post': post})
 
 
 def edit_post(request, post_id):

@@ -2,12 +2,12 @@
 {% block content %}
 
 <h2>{{ post.title }} - {{ post.date|date:"d.m.Y" }}</h2>
-<h3>
+<h4>
 	Author -
-	{% for author in authors %}
-		<a>{{ author }}  </a>
+	{% for author in post.author.all %}
+		<a>{{ author }}, </a>
 	{% endfor %}
-</h3>
+</h4>
 <p>{{ post.body }}</p>
 
 {% if error_message %}

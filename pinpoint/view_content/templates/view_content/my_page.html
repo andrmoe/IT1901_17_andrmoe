@@ -9,7 +9,9 @@
 	<tr><th>Posts</th><th>Author</th></tr>
  		{% for post in posts %}
 	<tr class="pointer" onclick="document.location='/edit/{{ post.id }}'">
-		 <td>{{ post.title }}</td><td> ({{post.author}})</td>
+		 <td>{{ post.title }}</td><td> ({% for author in post.author.all %}
+											{{ author.username }},
+                                        {% endfor %})</td>
 	</tr>
  		{% endfor %}
 	</table>
@@ -27,7 +29,9 @@
 			 <td onclick="document.location='/edit/{{ post.id }}'">
 				 {{ post.title }}
 			 </td>
-			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({% for author in post.author.all %}
+																		{{ author.username }},
+                                        							{% endfor %})</td>
 			<td>
 				{% if post.editor is None %}
 				<center><button class="btn btn-outline-secondary btn-sm" onclick="document.location='/assign/{{ post.id }}'">Assign to self</button></center>

@@ -3,7 +3,9 @@
 {% block content %}
   
   <h2>Edit</h2>
-<div>Author: {{ post.author }}</div><br>
+<div>Author: {% for author in post.author.all %}
+                {{ author.username }},
+             {% endfor %}</div><br>
   {% if I_am_the_author and post.comment %}
     <div>
       <h5>Comment from editor ({{ post.editor }}):</h5>
