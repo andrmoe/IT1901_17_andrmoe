@@ -186,3 +186,17 @@ def executive_page(request):
     if not is_executive_editor(request.user):
         return redirect("/")
     return render(request, "view_content/executive_page.html")
+
+def save_post_to_user(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.user.is_authenticated:
+        post.saved_users.add(request.user)
+    return redirect("/"+post_id)
+
+def get_saved_content(user):
+        return Post.objects.filter(saved_users=user).order_by('-date')
+
+def view_saved_content(request):
+    if not request.user.is_authenticated:
+        return redirect("/")
+    return render(request, "view_content/saved_posts.html", {'saved_posts': get_saved_content(request.user)})
