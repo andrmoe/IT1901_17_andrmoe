@@ -23,6 +23,11 @@ def is_author(user):
         return user.groups.filter(name='authors').exists()
     else: return False
 
+def is_executive_editor(user):
+    if user.is_authenticated:
+        return user.groups.filter(name='executive editor').exists()
+    else: return False
+
 
 def get_group_members(group_name):
     return User.objects.filter(groups__name=group_name)
@@ -180,3 +185,10 @@ def delete_post(post_id):
     if request.user == post.author:
         post.delete()
         return render(request, "view_content/my_page.html", {'post': post})
+
+def executive_page(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    if not is_executive_editor(request.user):
+        return redirect("/")
+    return render(request, "view_content/executive_page.html")
