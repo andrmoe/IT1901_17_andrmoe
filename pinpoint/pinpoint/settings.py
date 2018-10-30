@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'view_content',
     'main',
+    'django_select2',
 ]
 
 MIDDLEWARE = [
