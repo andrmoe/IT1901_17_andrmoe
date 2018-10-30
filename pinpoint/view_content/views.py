@@ -5,6 +5,12 @@ from django.db.models import Q
 from .forms import AuthorForm, EditorForm
 
 
+def is_executive_editor(user):
+    if user.is_authenticated:
+        return user.groups.filter(name='executive editor').exists()
+    else:
+        return False
+
 def is_editor(user):
     if user.is_authenticated:
         return user.groups.filter(name='editor').exists()
