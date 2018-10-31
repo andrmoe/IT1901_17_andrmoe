@@ -193,17 +193,20 @@ def subscriptions(request):
                                                                'not_subscribed_authors': not_subscribed_authors,
                                                                'not_subscribed_categories': not_subscribed_categories})
 
+
 def confirm_delete(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.user == post.author:
         return render(request, "view_content/confirm_delete.html", {'post': post})
 
 
-def delete_post(post_id):
+def delete_post(request, post_id):
     post = Post.objects.get(id=post_id)
+    print(request.user == post.author)
     if request.user == post.author:
         post.delete()
-        return render(request, "view_content/my_page.html", {'post': post})
+        return redirect("/my_page/")
+
 
 def save_post_to_user(request, post_id):
     post = Post.objects.get(id=post_id)
@@ -211,8 +214,10 @@ def save_post_to_user(request, post_id):
         post.saved_users.add(request.user)
     return redirect("/"+post_id)
 
+
 def get_saved_content(user):
         return Post.objects.filter(saved_users=user).order_by('-date')
+
 
 def view_saved_content(request):
     if not request.user.is_authenticated:
