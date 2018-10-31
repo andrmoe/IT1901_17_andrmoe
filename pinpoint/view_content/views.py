@@ -5,14 +5,12 @@ from django.db.models import Q
 from .forms import AuthorForm, EditorForm, ExEditorForm
 
 
-<<<<<<< HEAD
+
 def is_executive_editor(user):
     if user.is_authenticated:
         return user.groups.filter(name='executive editor').exists()
     else:
         return False
-=======
->>>>>>> Aschmirthan
 
 def is_editor(user):
     if user.is_authenticated:
@@ -235,4 +233,3 @@ def executive_page(request):
         post.editor = User.objects.get(username=selected_value)
         post.save()
     return render(request, "view_content/executive_page.html", {'needs_proofreading': needs_proofreading, 'editors': editors})
->>>>>>> Aschmirthan
