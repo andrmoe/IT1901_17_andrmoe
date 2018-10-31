@@ -60,4 +60,26 @@
 	{% endfor %}
 </table>
 
+<br>
+<h4>Needs Proofreading</h4>
+	{% for post in needs_proofreading %}
+		<form method="GET" action="">
+		{% if post.editor is none %}
+
+		<td><center>
+			<input type="hidden" name="selected_post" value="{{ post.id }}">
+			<select name="selected_value"  onchange="this.form.submit()">
+				<option value="" selected="selected">Choose from list</option>
+				{% for editor in editors %}
+					<option value="{{ editor.username }}">{{ editor.username }}</option>
+				{% endfor %}
+			</select>
+			
+			</center></td>
+		</tr>
+		</form>
+		{% endif %}
+	{% endfor %}
+
+</table>
 {% endblock %}
