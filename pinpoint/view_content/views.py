@@ -5,6 +5,7 @@ from django.db.models import Q
 from .forms import AuthorForm, EditorForm
 
 
+
 def is_editor(user):
     if user.is_authenticated:
         return user.groups.filter(name='editor').exists()
@@ -116,14 +117,10 @@ def my_page(request):
     if not request.user.is_authenticated:
         return redirect('/')
     I_am_editor = is_editor(request.user)
-    subscribed_content = get_subscribed_content(request.user)
-    subscriptions = get_author_subscriptions(request.user)
-    subscriptions_cat = get_category_subscriptions(request.user)
     posts = Post.objects.filter(author=request.user)
     needs_proofreading = Post.objects.filter(needs_proofreading=True)
     return render(request, "view_content/my_page.html",
-                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'subscribed_content': subscribed_content,
-                   'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat, 'is_editor': I_am_editor})
+                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'is_editor': I_am_editor})
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
@@ -181,8 +178,14 @@ def delete_post(post_id):
         return render(request, "view_content/my_page.html", {'post': post})
 
 def executive_page(request):
-    if not request.user.is_authenticated:
-        return redirect('/')
     if not is_executive_editor(request.user):
-        return redirect("/")
-    return render(request, "view_content/executive_page.html")
+        return redirect("/") 
+    needs_proofreading = Post.objects.filter(needs_proofreading=True)
+    editors = get_group_members('editor')
+    selected_value = request.GET.get("selected_value")
+    selected_post = request.GET.get("selected_post")
+    if selected_value:
+        post = Post.objects.get(id=selected_post)
+        post.editor = User.objects.get(username=selected_value)
+        post.save()
+    return render(request, "view_content/executive_page.html", {'needs_proofreading': needs_proofreading, 'editors': editors})

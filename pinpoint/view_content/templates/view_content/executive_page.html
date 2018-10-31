@@ -2,4 +2,34 @@
 {% block content %}
 	<h2>Excecutive page</h2>
 
+<br>
+<h4>Needs Proofreading</h4>
+<table class="table table-hover">
+<tr>
+	<th>Posts</th><th>Author</th><th><center>Editor</center></th>
+</tr>
+	{% for post in needs_proofreading %}
+		<form method="GET" action="">
+		{% if post.editor is none %}
+		<tr>
+			 <td onclick="document.location='/edit/{{ post.id }}'">
+				 {{ post.title }}
+			 </td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td><center>
+			<input type="hidden" name="selected_post" value="{{ post.id }}">
+			<select name="selected_value"  onchange="this.form.submit()">
+				<option value="" selected="selected">Choose from list</option>
+				{% for editor in editors %}
+					<option value="{{ editor.username }}">{{ editor.username }}</option>
+				{% endfor %}
+			</select>
+			
+			</center></td>
+		</tr>
+		</form>
+		{% endif %}
+	{% endfor %}
+
+</table>
 {% endblock %}
