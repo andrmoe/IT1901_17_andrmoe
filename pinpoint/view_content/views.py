@@ -177,6 +177,53 @@ def delete_post(post_id):
         post.delete()
         return render(request, "view_content/my_page.html", {'post': post})
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def executive_page(request):
     if not is_executive_editor(request.user):
         return redirect("/") 
