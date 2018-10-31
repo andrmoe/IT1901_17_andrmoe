@@ -11,6 +11,11 @@ AuthorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreadin
                                       'categories':CheckboxSelectMultiple(),})
 
 
-EditorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading', 'published', 'categories', 'comment'],
+EditorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading', 'needs_approval', 'categories', 'comment'],
+                             widgets={'body': Textarea(attrs={'cols': 100, 'rows': 25}),
+                                      'categories':CheckboxSelectMultiple()})
+
+
+ExEditorForm = modelform_factory(Post, fields=['title', 'body','needs_proofreading', 'needs_approval', 'published', 'categories', 'comment'],
                              widgets={'body': Textarea(attrs={'cols': 100, 'rows': 25}),
                                       'categories':CheckboxSelectMultiple(),})

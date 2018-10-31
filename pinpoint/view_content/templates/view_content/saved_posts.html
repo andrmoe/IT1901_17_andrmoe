@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}My Page{% endblock %}
+{% block content %}
+<h2>Saved Posts</h2>
+<br>
+{% if saved_posts %}
+	<table class="table table-hover">
+	<tr><th>Posts</th><th>Author</th></tr>
+ 		{% for post in saved_posts %}
+	<tr class="pointer" onclick="document.location='/{{ post.id }}'">
+		 <td>{{ post.title }}</td><td> ({{post.author}})</td>
+	</tr>
+ 		{% endfor %}
+	</table>
+{% endif %}
+{% endblock %}

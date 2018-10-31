@@ -44,6 +44,10 @@
       cursor: pointer;
     }
 
+    #id_categories{
+      list-style-type: none;
+    }
+
     
   </style>
   </head>
@@ -66,6 +70,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'subscriptions' %}">My subscriptions</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'saved_posts' %}">Saved Posts</a>
         </li>
         {% else %}
         <li class="nav-item">
