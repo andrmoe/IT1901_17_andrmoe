@@ -1,8 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, AuthorSubscription
 from django.contrib.auth.models import User
-from .forms import AuthorForm, EditorForm
+from django.db.models import Q
+from .forms import AuthorForm, EditorForm, ExEditorForm
 
+
+def is_executive_editor(user):
+    if user.is_authenticated:
+        return user.groups.filter(name='executive editor').exists()
+    else:
+        return False
 
 def is_editor(user):
     if user.is_authenticated:
@@ -14,6 +21,11 @@ def is_editor(user):
 def is_author(user):
     if user.is_authenticated:
         return user.groups.filter(name='authors').exists()
+    else: return False
+
+def is_executive_editor(user):
+    if user.is_authenticated:
+        return user.groups.filter(name='executive editor').exists()
     else: return False
 
 
@@ -44,8 +56,16 @@ def get_category_subscriptions(user):
 
 
 def index(request):
-    posts = Post.objects.all().order_by("-date")[:20]
-    return render(request, "view_content/TEMPORARY.html", {'posts': posts})
+    posts = Post.objects.all()
+    query = request.GET.get("q")
+    if query:
+        posts = posts.filter(
+                            Q(title__contains=query) |
+                            Q(body__contains=query) |
+                            Q(author__username__contains=query) |
+                            Q(categories__name__contains=query)
+                            ).distinct()
+    return render(request, "view_content/TEMPORARY.html", {'posts': posts.order_by("-date")[:20]})
 
 
 def create_content(request):
@@ -76,7 +96,9 @@ def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     I_am_the_author = post.author == request.user
     if request.method == 'POST':
-        if post.editor == request.user:
+        if  is_executive_editor(request.user):
+            form = ExEditorForm(request.POST, instance=post)
+        elif post.editor == request.user:
             form = EditorForm(request.POST, instance=post)
         elif post.author == request.user:
             form = AuthorForm(request.POST, instance=post)
@@ -84,11 +106,16 @@ def edit_post(request, post_id):
             return redirect("/my_page/")
         if form.is_valid():
             form.save()
-            return redirect("/my_page/")
+            if is_executive_editor(request.user):
+                return redirect("/executive_page/")
+            else:
+                return redirect("/my_page/")
     else:
         initial = post.__dict__
         initial['categories'] = [category.id for category in post.categories.all()]
-        if post.editor == request.user:
+        if is_executive_editor(request.user):
+            form = ExEditorForm(initial=initial)
+        elif post.editor == request.user:
             form = EditorForm(initial=initial)
         elif post.author == request.user:
             form = AuthorForm(initial=initial)
@@ -110,6 +137,13 @@ def my_page(request):
     return render(request, "view_content/my_page.html",
                   {'posts': posts, 'needs_proofreading': needs_proofreading, 'subscribed_content': subscribed_content,
                    'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat, 'is_editor': I_am_editor})
+
+def executive_page(request):
+    if not is_executive_editor(request.user):
+        return redirect("/")
+    needs_approval = Post.objects.filter(needs_approval=True)
+    published = Post.objects.filter(published=True)
+    return render(request, "view_content/executive_page.html",{'needs_approval': needs_approval, 'published': published})
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
@@ -156,22 +190,31 @@ def subscriptions(request):
 
 
 def confirm_delete(request, post_id):
-    print("test confirm")
     post = Post.objects.get(id=post_id)
-    print(request.user == post.author)
     if request.user == post.author:
         return render(request, "view_content/confirm_delete.html", {'post': post})
-    else:
-        print("false shit")
 
 
 def delete_post(request, post_id):
-    print("test delete")
     post = Post.objects.get(id=post_id)
     print(request.user == post.author)
     if request.user == post.author:
         post.delete()
         return redirect("/my_page/")
-    else:
-        print("false shit")
 
+
+def save_post_to_user(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.user.is_authenticated:
+        post.saved_users.add(request.user)
+    return redirect("/"+post_id)
+
+
+def get_saved_content(user):
+        return Post.objects.filter(saved_users=user).order_by('-date')
+
+
+def view_saved_content(request):
+    if not request.user.is_authenticated:
+        return redirect("/")
+    return render(request, "view_content/saved_posts.html", {'saved_posts': get_saved_content(request.user)})

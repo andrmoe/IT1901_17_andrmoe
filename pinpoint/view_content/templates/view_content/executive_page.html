@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Excecutive page</h2>
+
+{% if needs_approval%}
+<h4>Needs Approval</h4>
+<table class="table table-hover">
+<tr>
+	<th>Posts</th><th>Author</th><th><center>Editor</center></th>
+</tr>
+	{% for post in needs_approval %}
+		<tr>
+			 <td onclick="document.location='/edit/{{ post.id }}'">
+				 {{ post.title }}
+			 </td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td>
+				<center>{{ post.editor }}</center>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+{% endif %}
+
+{%if published%}
+<h4>Published Content</h4>
+<table class="table table-hover">
+<tr>
+	<th>Posts</th><th>Author</th><th><center>Editor</center></th>
+</tr>
+	{% for post in published %}
+		<tr>
+			 <td onclick="document.location='/edit/{{ post.id }}'">
+				 {{ post.title }}
+			 </td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td>
+				<center>{{ post.editor }}</center>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+{%endif%}
+
+{% endblock %}
