@@ -40,6 +40,24 @@
 		</tr>
 	{% endfor %}
 </table>
-{%endif%}
+{% endif %}
+
+<h4>Other Content</h4>
+<table class="table table-hover">
+<tr>
+	<th>Posts</th><th>Author</th><th><center>Editor</center></th>
+</tr>
+	{% for post in other %}
+		<tr>
+			 <td onclick="document.location='/edit/{{ post.id }}'">
+				 {{ post.title }}
+			 </td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td>
+				<center>{{ post.editor }}</center>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
 
 {% endblock %}

@@ -141,9 +141,15 @@ def my_page(request):
 def executive_page(request):
     if not is_executive_editor(request.user):
         return redirect("/")
-    needs_approval = Post.objects.filter(needs_approval=True)
+    needs_approval = Post.objects.filter(needs_approval=True, published=False)
     published = Post.objects.filter(published=True)
-    return render(request, "view_content/executive_page.html",{'needs_approval': needs_approval, 'published': published})
+    posts = Post.objects.all()
+    other=Post.objects.all().difference(needs_approval).difference(published)
+    return render(request, "view_content/executive_page.html",{'needs_approval': needs_approval,
+                                                               'published': published,
+                                                               'posts':posts,
+                                                               'other':other,
+                                                               })
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
