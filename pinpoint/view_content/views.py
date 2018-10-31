@@ -200,13 +200,6 @@ def delete_post(post_id):
         post.delete()
         return render(request, "view_content/my_page.html", {'post': post})
 
-def executive_page(request):
-    if not request.user.is_authenticated:
-        return redirect('/')
-    if not is_executive_editor(request.user):
-        return redirect("/")
-    return render(request, "view_content/executive_page.html")
-
 def save_post_to_user(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.user.is_authenticated:
