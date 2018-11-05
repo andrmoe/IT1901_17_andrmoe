@@ -13,7 +13,9 @@
 			 <td onclick="document.location='/edit/{{ post.id }}'">
 				 {{ post.title }}
 			 </td>
-			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({% for author in post.author.all %}
+																		{{ author.username }},
+                                        							{% endfor %})</td>
 			<td>
 				<center>{{ post.editor }}</center>
 			</td>
@@ -33,7 +35,9 @@
 			 <td onclick="document.location='/edit/{{ post.id }}'">
 				 {{ post.title }}
 			 </td>
-			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({% for author in post.author.all %}
+																		{{ author.username }},
+                                        							{% endfor %})</td>
 			<td>
 				<center>{{ post.editor }}</center>
 			</td>
@@ -52,7 +56,9 @@
 			 <td onclick="document.location='/edit/{{ post.id }}'">
 				 {{ post.title }}
 			 </td>
-			<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+			<td onclick="document.location='/edit/{{ post.id }}'">({% for author in post.author.all %}
+																		{{ author.username }},
+                                        							{% endfor %})</td>
 			<td>
 				<center>{{ post.editor }}</center>
 			</td>
