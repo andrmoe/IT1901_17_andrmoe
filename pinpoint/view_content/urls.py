@@ -12,5 +12,8 @@ urlpatterns = [
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('subscribe_author/<author_id>', views.subscribe_to_author),
     path('subscribe_category/<category_id>', views.subscribe_to_category),
+    path('request/role/<group_id>', views.request_role),
+    path('approve/role/<role_request_id>', views.approve_user_group),
+    path('deny/role/<role_request_id>', views.delete_request),
     path('<post_id>', views.detailPost, name='detail'),
 ]

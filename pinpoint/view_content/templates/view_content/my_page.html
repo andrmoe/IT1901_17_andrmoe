@@ -39,5 +39,48 @@
 	{% endfor %}
 </table>
 {% endif %}
+<h4>Request new role</h4>
+<table class="table table-hover">
+	<tr>
+		<th>Role</th><th>Request Role</th>
+	</tr>
+		{% for group in groups %}
+			<tr>
+				<td>
+					{{ group }}
+				</td>
+				<td>
+					{% ifequal user.groups.all.0.name group %}
+					Assigned
+					{% else %}
+					<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/request/role/{{ group.id }}'">Request</button>
+					{% endifequal %}
+				</td>
+			</tr>
+		{% endfor %}
+</table>
+{% if request.user.is_superuser %}
+<h4>Role requests</h4>
+<table class="table table-hover">
+	<tr>
+		<th>User</th><th>Requested Role</th><th>Approve</th><th>Deny</th>
+	</tr>
+	{% for request in role_requests %}
+		<tr>
+			<td>
+				{{ request.user }}
+			</td>
+			<td>
+				{{ request.group.name }}
+			</td>
+			<td>
+				<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/approve/role/{{ request.id }}'">Approve</button>
+			</td>
+			<td>
+				<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/deny/role/{{ request.id }}'">Deny</button>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+{% endif %}
 {% endblock %}
-

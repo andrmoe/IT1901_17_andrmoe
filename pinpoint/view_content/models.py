@@ -33,3 +33,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+class RoleRequest(models.Model):
+    group = models.ForeignKey('auth.Group', on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username + ' is requesting the role: ' + self.group.name
