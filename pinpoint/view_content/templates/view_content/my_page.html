@@ -8,14 +8,15 @@
 	<table class="table table-hover">
 	<tr><th>Posts</th><th>Author</th><th></th></tr>
  		{% for post in posts %}
-	<tr class="pointer" onclick="document.location='/edit/{{ post.id }}'">
-		 <td>{{ post.title }}</td><td> ({% for author in post.author.all %}
-											{{ author.username }},
-                                        {% endfor %})</td>
+	<tr class="pointer">
+		<td onclick="document.location='/edit/{{ post.id }}'">{{ post.title }}</td>
+		<td>({% for author in post.author.all %}
+				{{ author.username }},
+			{% endfor %})</td>
 		<td>
 			<center>
 				<button class="btn btn-outline-secondary btn-sm"
-						onclick="document.location='/submit_for_proofreading/{{ post.id }}'">Submit for proofreading
+						onclick="document.location='/submit_to_proofreading/{{ post.id }}'">Submit for proofreading
 				</button>
 			</center>
 		</td>

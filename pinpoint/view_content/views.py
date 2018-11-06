@@ -114,6 +114,7 @@ def edit_post(request, post_id):
     else:
         initial = post.__dict__
         initial['categories'] = [category.id for category in post.categories.all()]
+        initial['author'] = [author.id for author in post.author.all()]
         if is_executive_editor(request.user):
             form = ExEditorForm(initial=initial)
         elif post.editor == request.user:
@@ -135,8 +136,7 @@ def my_page(request):
     groups = Group.objects.all
     role_requests = RoleRequest.objects.all()
     return render(request, "view_content/my_page.html",
-                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'subscribed_content': subscribed_content,
-                   'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat, 'is_editor': I_am_editor, 'groups': groups, 'role_requests': role_requests})
+                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'is_editor': I_am_editor, 'groups': groups, 'role_requests': role_requests})
 
 
 def executive_page(request):
@@ -251,8 +251,11 @@ def delete_post(request, post_id):
 
 def submit_for_proofreading(request, post_id):
     post = Post.objects.get(id=post_id)
+    print(post.needs_proofreading, "\n\n\n\n\n\n")
     if has_written(request.user, post):
+        print(post.needs_proofreading, "\n\n\n\n\n\n")
         post.needs_proofreading = True
+        print(post.needs_proofreading, "\n\n\n\n\n\n")
     post.save()
     return redirect("/my_page/")
 
