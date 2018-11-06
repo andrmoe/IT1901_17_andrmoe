@@ -216,6 +216,14 @@ def delete_post(request, post_id):
     return redirect("/my_page/")
 
 
+def submit_for_proofreading(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if has_written(request.user, post):
+        post.needs_proofreading = True
+    post.save()
+    return redirect("/my_page/")
+
+
 def save_post_to_user(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.user.is_authenticated:
@@ -231,7 +239,6 @@ def view_saved_content(request):
     if not request.user.is_authenticated:
         return redirect("/")
     return render(request, "view_content/saved_posts.html", {'saved_posts': get_saved_content(request.user)})
-
 
 
 def my_profile(request):

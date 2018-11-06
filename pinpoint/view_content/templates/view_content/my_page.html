@@ -6,12 +6,19 @@
 {% if posts %}
 	<h4>My Posts</h4>
 	<table class="table table-hover">
-	<tr><th>Posts</th><th>Author</th></tr>
+	<tr><th>Posts</th><th>Author</th><th></th></tr>
  		{% for post in posts %}
 	<tr class="pointer" onclick="document.location='/edit/{{ post.id }}'">
 		 <td>{{ post.title }}</td><td> ({% for author in post.author.all %}
 											{{ author.username }},
                                         {% endfor %})</td>
+		<td>
+			<center>
+				<button class="btn btn-outline-secondary btn-sm"
+						onclick="document.location='/submit_for_proofreading/{{ post.id }}'">Submit for proofreading
+				</button>
+			</center>
+		</td>
 	</tr>
  		{% endfor %}
 	</table>
