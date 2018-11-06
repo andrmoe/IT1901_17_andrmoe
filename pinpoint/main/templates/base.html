@@ -82,13 +82,15 @@
         </ul>
         <ul class="navbar-nav justify-content-end">
         {% if request.user.is_authenticated %}
-          
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'executive_page' %}">Executive page</a>
-            </li>
-        
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'my_page' %}">My Page</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          My sites
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'executive_page' %}">Executive page</a>
+            <a class="dropdown-item" href="{% url 'my_page' %}">My page</a>
+            <a class="dropdown-item" href="{% url 'my_profile' %}">My profile</a>
+          </div>
         </li>
         <li class="btn btn-primary btn-sm">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>

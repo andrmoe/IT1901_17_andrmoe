@@ -16,7 +16,7 @@
                 <p>
                     {{ post.date|date:"d.m.Y" }}: -
                         <i>{% for author in post.author.all %}
-                            {{ author.username }},
+                            <a href="/profile/{{ author.id }}">{{ author.username }}</a>,
                             {% endfor %}
                         </i>
                     <small class="form-text text-muted">Categories: |
