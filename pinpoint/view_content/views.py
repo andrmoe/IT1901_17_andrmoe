@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Category, AuthorSubscription
-from django.contrib.auth.models import User
+from .models import Post, Category, AuthorSubscription, RoleRequest
+from django.contrib.auth.models import User, Group
 from django.db.models import Q
 from .forms import AuthorForm, EditorForm, ExEditorForm
 
@@ -132,8 +132,12 @@ def my_page(request):
     I_am_editor = is_editor(request.user)
     posts = Post.objects.filter(author=request.user)
     needs_proofreading = Post.objects.filter(needs_proofreading=True)
+    groups = Group.objects.all
+    role_requests = RoleRequest.objects.all()
     return render(request, "view_content/my_page.html",
-                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'is_editor': I_am_editor})
+                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'subscribed_content': subscribed_content,
+                   'subscriptions': subscriptions, 'subscriptions_cat': subscriptions_cat, 'is_editor': I_am_editor, 'groups': groups, 'role_requests': role_requests})
+
 
 def executive_page(request):
     if not is_executive_editor(request.user):
@@ -165,6 +169,35 @@ def assign_post_editor_to_logged_in_user(request, post_id):
         post = Post.objects.get(id=post_id)
         post.editor = request.user
         post.save()
+    return redirect("/my_page/")
+
+
+def delete_request(request, role_request_id):
+    role_request = RoleRequest.objects.get(id=role_request_id)
+    role_request.delete()
+    return redirect('/my_page/')
+
+
+def request_role(request, group_id):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    the_group = Group.objects.get(id=group_id)
+    role_request = RoleRequest(group=the_group, user=request.user)
+    role_request.save()
+    return redirect("/my_page/")
+
+
+def approve_user_group(request, role_request_id):
+    if not request.user.is_authenticated and request.user.is_superuser:
+        return redirect('/')
+    role_request = RoleRequest.objects.get(id=role_request_id)
+    the_group = role_request.group
+    user_requesting_new_role = role_request.user
+    the_group.user_set.add(user_requesting_new_role)
+    if the_group.name == 'executive editor':
+        the_group = Group.objects.get(name='editor')
+        the_group.user_set.add(user_requesting_new_role)
+    role_request.delete()
     return redirect("/my_page/")
 
 
@@ -245,8 +278,12 @@ def my_profile(request):
     if not request.user.is_authenticated:
         return redirect("/")
     user = request.user
-   # if request.method == 'Post':
-         
-    return render(request, "view_content/my_profile.html", {})
+    return render(request, "view_content/my_profile.html", {'user': user})
 
-    
+def show_users_profile(request, user_id):
+    if not request.user.is_authenticated:
+        return redirect("/")
+    user = User.objects.get(id=user_id)
+    author = is_author(user)
+    return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author})
+
