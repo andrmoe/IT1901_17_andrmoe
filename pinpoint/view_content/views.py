@@ -5,12 +5,12 @@ from django.db.models import Q
 from .forms import AuthorForm, EditorForm, ExEditorForm
 
 
-
 def is_executive_editor(user):
     if user.is_authenticated:
         return user.groups.filter(name='executive editor').exists()
     else:
         return False
+
 
 def is_editor(user):
     if user.is_authenticated:
@@ -22,11 +22,6 @@ def is_editor(user):
 def is_author(user):
     if user.is_authenticated:
         return user.groups.filter(name='authors').exists()
-    else: return False
-
-def is_executive_editor(user):
-    if user.is_authenticated:
-        return user.groups.filter(name='executive editor').exists()
     else: return False
 
 
