@@ -142,10 +142,19 @@ def executive_page(request):
     published = Post.objects.filter(published=True)
     posts = Post.objects.all()
     other=Post.objects.all().difference(needs_approval).difference(published)
+
+    editors = get_group_members('editor')
+    selected_value = request.GET.get("selected_value")
+    selected_post = request.GET.get("selected_post")
+    if selected_value:
+        post = Post.objects.get(id=selected_post)
+        post.editor = User.objects.get(username=selected_value)
+        post.save()
     return render(request, "view_content/executive_page.html",{'needs_approval': needs_approval,
                                                                'published': published,
                                                                'posts':posts,
                                                                'other':other,
+                                                               'editors': editors
                                                                })
 
 
@@ -223,15 +232,14 @@ def view_saved_content(request):
         return redirect("/")
     return render(request, "view_content/saved_posts.html", {'saved_posts': get_saved_content(request.user)})
 
-def executive_page(request):
-    if not is_executive_editor(request.user):
-        return redirect("/") 
-    needs_proofreading = Post.objects.filter(needs_proofreading=True)
-    editors = get_group_members('editor')
-    selected_value = request.GET.get("selected_value")
-    selected_post = request.GET.get("selected_post")
-    if selected_value:
-        post = Post.objects.get(id=selected_post)
-        post.editor = User.objects.get(username=selected_value)
-        post.save()
-    return render(request, "view_content/executive_page.html", {'needs_proofreading': needs_proofreading, 'editors': editors})
+
+
+def my_profile(request):
+    if not request.user.is_authenticated:
+        return redirect("/")
+    user = request.user
+   # if request.method == 'Post':
+         
+    return render(request, "view_content/my_profile.html", {})
+
+    
