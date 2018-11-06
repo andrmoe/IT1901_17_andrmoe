@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-<<<<<<< HEAD
-from .models import Post, Category, AuthorSubscription
-from django.contrib.auth.models import User
+from .models import Post, Category, AuthorSubscription, RoleRequest
+from django.contrib.auth.models import User, Group
 from django.db.models import Q
 from .forms import AuthorForm, EditorForm, ExEditorForm
 
@@ -11,11 +10,6 @@ def is_executive_editor(user):
         return user.groups.filter(name='executive editor').exists()
     else:
         return False
-=======
-from .models import Post, Category, AuthorSubscription, RoleRequest
-from django.contrib.auth.models import User, Group
-from .forms import AuthorForm, EditorForm
->>>>>>> Sander
 
 
 def is_editor(user):
