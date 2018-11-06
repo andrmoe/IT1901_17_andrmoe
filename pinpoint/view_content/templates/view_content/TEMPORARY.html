@@ -12,16 +12,21 @@
     {% for post in posts %}
         {% if post.published %}
         	<div class="pointer" onclick="document.location='{% url 'detail' post.id %}'">
-    		    <h4>{{ post.title }}</h4>
-    		    <p>{{ post.date|date:"d.m.Y" }}: <a href="">   -<i>{{ post.author.username }}</i></a> 
-                <small class="form-text text-muted">Categories: |
-                    {% for category in post.categories.all %}
-                        {{ category.name }} |
-                    {% endfor %}
-                </small>
+                <h4>{{ post.title }}</h4>
+                <p>
+                    {{ post.date|date:"d.m.Y" }}: -
+                        <i>{% for author in post.author.all %}
+                            {{ author.username }},
+                            {% endfor %}
+                        </i>
+                    <small class="form-text text-muted">Categories: |
+                            {% for category in post.categories.all %}
+                                {{ category.name }} |
+                            {% endfor %}
+                    </small>
                 </p>
-		  </div> 
-            <hr>
+            </div>
+        <hr>
         {% endif %}
     {% endfor %}
     {% else %}

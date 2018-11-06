@@ -5,12 +5,12 @@ from django.db.models import Q
 from .forms import AuthorForm, EditorForm, ExEditorForm
 
 
-
 def is_executive_editor(user):
     if user.is_authenticated:
         return user.groups.filter(name='executive editor').exists()
     else:
         return False
+
 
 def is_editor(user):
     if user.is_authenticated:
@@ -24,10 +24,9 @@ def is_author(user):
         return user.groups.filter(name='authors').exists()
     else: return False
 
-def is_executive_editor(user):
-    if user.is_authenticated:
-        return user.groups.filter(name='executive editor').exists()
-    else: return False
+
+def has_written(author, post):
+    return author in post.author.all()
 
 
 def get_group_members(group_name):
@@ -74,11 +73,12 @@ def create_content(request):
         return redirect('/')
     if not is_author(request.user):
         return redirect("/")
-    post = Post(author=request.user)
+    post = Post()
     if request.method == 'POST':
         form = AuthorForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
+            post.author.add(request.user)
             return redirect("/")
     else:
         form = AuthorForm(initial=post.__dict__)
@@ -95,13 +95,13 @@ def edit_post(request, post_id):
     if not request.user.is_authenticated:
         return redirect('/')
     post = get_object_or_404(Post, id=post_id)
-    I_am_the_author = post.author == request.user
+    I_am_the_author = has_written(request.user, post)
     if request.method == 'POST':
         if  is_executive_editor(request.user):
             form = ExEditorForm(request.POST, instance=post)
         elif post.editor == request.user:
             form = EditorForm(request.POST, instance=post)
-        elif post.author == request.user:
+        elif I_am_the_author:
             form = AuthorForm(request.POST, instance=post)
         else:
             return redirect("/my_page/")
@@ -118,7 +118,7 @@ def edit_post(request, post_id):
             form = ExEditorForm(initial=initial)
         elif post.editor == request.user:
             form = EditorForm(initial=initial)
-        elif post.author == request.user:
+        elif I_am_the_author:
             form = AuthorForm(initial=initial)
         else:
             return redirect("/my_page/")
