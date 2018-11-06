@@ -233,13 +233,21 @@ def view_saved_content(request):
     return render(request, "view_content/saved_posts.html", {'saved_posts': get_saved_content(request.user)})
 
 
-
 def my_profile(request):
     if not request.user.is_authenticated:
         return redirect("/")
     user = request.user
-   # if request.method == 'Post':
-         
-    return render(request, "view_content/my_profile.html", {})
+    return render(request, "view_content/my_profile.html", {'user': user})
+
+def show_users_profile(request, user_id):
+    if not request.user.is_authenticated:
+        return redirect("/")
+    user = User.objects.get(id=user_id)
+    author = is_author(user)
+    return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author})
+
+
+
+
 
     

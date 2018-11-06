@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}My profile{% endblock %}
+{% block content %}
+<h2> My profile </h2>
+<br>
+<table class="table borderless">
+	<tr><td>Username:</td><td>{{user.username}}</td></tr>
+	<tr><td>Firstname:</td><td>{{user.first_name}}</td></tr>
+	<tr><td>Surname:</td><td>{{user.last_name}}</td></tr>
+	<tr><td>Email:</td><td>{{user.email}}</td></tr>
+	<tr><td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/accounts/my_profile/edit/'">Edit info</button></td><td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/accounts/my_profile/change_password/'">Change password</button></td></tr>
+</table>
+
+{% endblock %}

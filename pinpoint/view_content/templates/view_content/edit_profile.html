@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit your information</h2>
+<form method="POST">
+	{% csrf_token %}
+	<table class="table">
+		<tr><td>Username:</td><td>{{ user.username }}</td><td><small class="form-text text-muted">Cannot be edited</small></td></tr>
+    	{% for field in form %}
+    		<tr> 
+    			<td>{{ field.label_tag }}</td>
+    			<td>{{ field }}</td>
+    			
+    			{% if field.help_text %}
+
+    				{% if field.errors %}
+    				<td style="color: red;"><small>
+			        	{{ field.help_text|safe }}  <!-- new code here -->
+			      	</small></td>
+    				{% else %}
+			     	<td><small class="form-text text-muted">
+			        	{{ field.help_text|safe }}  <!-- new code here -->
+			      	</small></td>
+			      	 {% endif %}
+			    {% endif %}
+			</tr>
+		{% endfor %}
+    </table>	
+<button class="btn-outline-primary" type="submit">Save</button>
+</form>
+
+{% endblock %}
