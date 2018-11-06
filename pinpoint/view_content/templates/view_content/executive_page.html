@@ -11,7 +11,9 @@
 		<form method="GET" action="">
 		{% if post.editor is none %}
 		<td onclick="document.location='/edit/{{ post.id }}'">{{ post.title }}</td>
-		<td onclick="document.location='/edit/{{ post.id }}'">({{post.author}})</td>
+		<td onclick="document.location='/edit/{{ post.id }}'">({% for author in post.author.all %}
+																		{{ author.username }},
+                                        							{% endfor %})</td>
 		<td><center>
 			<input type="hidden" name="selected_post" value="{{ post.id }}">
 			<select name="selected_value"  onchange="this.form.submit()">

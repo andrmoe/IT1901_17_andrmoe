@@ -194,16 +194,18 @@ def subscriptions(request):
 
 def confirm_delete(request, post_id):
     post = Post.objects.get(id=post_id)
-    if request.user == post.author:
+    if has_written(request.user, post):
         return render(request, "view_content/confirm_delete.html", {'post': post})
+    else:
+        return redirect("/edit/"+post_id)
 
 
 def delete_post(request, post_id):
     post = Post.objects.get(id=post_id)
-    print(request.user == post.author)
-    if request.user == post.author:
+    if has_written(request.user, post):
         post.delete()
-        return redirect("/my_page/")
+    return redirect("/my_page/")
+
 
 def save_post_to_user(request, post_id):
     post = Post.objects.get(id=post_id)
