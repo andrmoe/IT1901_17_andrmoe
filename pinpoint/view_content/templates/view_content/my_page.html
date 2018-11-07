@@ -78,20 +78,26 @@
 <h4>Request new role</h4>
 <table class="table table-hover">
 	<tr>
-		<th>Role</th><th>Request Role</th>
+		<th>Role</th><th colspan="2">Request Role</th>
 	</tr>
 		{% for group in groups %}
 			<tr>
 				<td>
 					{{ group }}
 				</td>
-				<td>
+				
 					{% if group in user.groups.all %}
-					Assigned
+					<td colspan="2">Assigned</td>
 					{% else %}
-					<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/request/role/{{ group.id }}'">Request</button>
+					<td><button class="btn btn-outline-secondary btn-sm" onclick="document.location='/request/role/{{ group.id }}'">Request</button></td>
+						{% for role in role_requests %}
+							{% ifequal user role.user %}
+							{% ifequal group role.group %}
+								<td>Request pending</td>
+							{% endifequal %}
+							{% endifequal %}
+						{% endfor %}
 					{% endif %}
-				</td>
 			</tr>
 		{% endfor %}
 </table>
