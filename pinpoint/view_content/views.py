@@ -47,6 +47,12 @@ def get_author_subscriptions(user):
     else:
         return User.objects.none()
 
+def get_author_subscibers(user):
+    if user.is_authenticated:
+        return User.objects.filter(subscriber__author=user)
+    else:
+        return User.objects.none()
+
 
 def get_category_subscriptions(user):
     if user.is_authenticated:
@@ -62,6 +68,11 @@ def is_author_already_subscribed_to_user(author, user):
                 return True
     return False
 
+def user_info(user):
+    if user.is_authenticated:
+        user_subscriptions = get_author_subscriptions(user).count()
+        user_subscribers = get_author_subscibers(user).count()
+        return user_subscriptions, user_subscribers
 
 def index(request):
     posts = Post.objects.all()
@@ -286,13 +297,15 @@ def my_profile(request):
     if not request.user.is_authenticated:
         return redirect("/")
     user = request.user
-    return render(request, "view_content/my_profile.html", {'user': user})
+    user_subscriptions, user_subscribers = user_info(user)
+    return render(request, "view_content/my_profile.html", {'user': user, 'user_subscriptions': user_subscriptions,'user_subscribers': user_subscribers })
 
 def show_users_profile(request, user_id):
     if not request.user.is_authenticated:
         return redirect("/")
     user = User.objects.get(id=user_id)
+    user_subscriptions, user_subscribers = user_info(user)
     author = is_author(user)
     already_subscribed = is_author_already_subscribed_to_user(user, request.user)
-    return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author, 'already_subscribed': already_subscribed})
+    return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author, 'already_subscribed': already_subscribed, 'user_subscriptions': user_subscriptions,'user_subscribers': user_subscribers})
 

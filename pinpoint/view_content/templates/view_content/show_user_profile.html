@@ -3,12 +3,16 @@
 {% block content %}
 <h2> {{ user.username }}'s page </h2>
 <br>
-<table class="table borderless">	
+<table class="table borderless">
+	<tr>	
 	{% if author and not already_subscribed %}
-	<tr><center><td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/subscribe_author/{{ user.id }}'">Subscribe</button></td></td></tr>
+	<td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/subscribe_author/{{ user.id }}'">Subscribe</button></td>
 	{% else %}
-	<tr><center><td><button class="btn btn-secondary active" disabled>Already subscribed</button></td></td></tr>
+	<td><button class="btn btn-secondary active" disabled>Already subscribed</button></td>
 	{% endif %}
+	<tr><td>Followers:</td><td> {{user_subscribers}}</td></tr>
+	<tr><td>Following:</td><td> {{user_subscriptions}}</td></tr>
+	</tr>
 	<tr><td>Username:</td><td>{{user.username}}</td></tr>
 	<tr><td>Firstname:</td><td>{{user.first_name}}</td></tr>
 	<tr><td>Surname:</td><td>{{user.last_name}}</td></tr>

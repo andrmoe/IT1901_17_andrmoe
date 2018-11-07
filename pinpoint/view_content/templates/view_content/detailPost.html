@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
 {% block content %}
 
 <h2>{{ post.title }} - {{ post.date|date:"d.m.Y" }}</h2>
@@ -9,7 +10,7 @@
 	{% endfor %}
 </h4>
 <p>{{ post.body }}</p>
-{% if request.user.is_authenticated%} <button onclick="document.location='/save_post/{{ post.id }}'">Add to Saved Posts</button> {% endif %}
+{% if request.user.is_authenticated%} <button class="btn btn-primary btn-sm" onclick="document.location='/save_post/{{ post.id }}'">Add to Saved Posts</button> {% endif %}
 {% if error_message %}
 	<p><strong>{{ error_message }}</strong></p>
 {% endif %}
