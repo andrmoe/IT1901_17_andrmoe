@@ -149,9 +149,10 @@ def edit_post(request, post_id):
 
     return render(request, "view_content/edit.html", {'form': form, 'I_am_the_author': I_am_the_author, 'post': post})
 
+
 def add_category(request):
-	if request.method == 'POST': 
-		get_text = str(request.POST.get('new_cat'))
+    if request.method == 'POST':
+        get_text = str(request.POST.get('new_cat'))
 		if Category.objects.filter(name=get_text):	
 			return redirect('/')
 		new_category = Category.objects.create(name=get_text)
