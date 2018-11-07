@@ -13,6 +13,8 @@ urlpatterns = [
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('subscribe_author/<author_id>', views.subscribe_to_author),
     path('subscribe_category/<category_id>', views.subscribe_to_category),
+    path('unsubscribe_author/<author_id>', views.unsubscribe_to_author),
+    path('unsubscribe_category/<category_id>', views.unsubscribe_to_category),
     path('request/role/<group_id>', views.request_role),
     path('approve/role/<role_request_id>', views.approve_user_group),
     path('deny/role/<role_request_id>', views.delete_request),
@@ -22,5 +24,6 @@ urlpatterns = [
     path('executive_page/', views.executive_page, name='executive_page'),
     path('my_profile/', views.my_profile, name='my_profile'),
     path('submit_to_proofreading/<post_id>', views.submit_for_proofreading),
-    path('profile/<user_id>', views.show_users_profile, name='view_profile')
+    path('profile/<user_id>', views.show_users_profile, name='view_profile'),
+    path('add_category/', views.add_category, name='add_category')
 ]
