@@ -259,11 +259,8 @@ def delete_post(request, post_id):
 
 def submit_for_proofreading(request, post_id):
     post = Post.objects.get(id=post_id)
-    print(post.needs_proofreading, "\n\n\n\n\n\n")
     if has_written(request.user, post):
-        print(post.needs_proofreading, "\n\n\n\n\n\n")
         post.needs_proofreading = True
-        print(post.needs_proofreading, "\n\n\n\n\n\n")
     post.save()
     return redirect("/my_page/")
 
