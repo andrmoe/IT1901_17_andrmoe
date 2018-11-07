@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, UserEditForm
@@ -40,6 +40,7 @@ def edit_profile(request):
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
+            update_session_auth_hash(request, user)
             return redirect("/my_profile/")
     else:
         form = UserEditForm(instance=user)
@@ -52,6 +53,7 @@ def change_password(request):
         form = SetPasswordForm(request.user, data=request.POST)
         if form.is_valid():
             form.save()
+            update_session_auth_hash(request, form.user)
             return redirect("/my_profile/")
     else:
         form = SetPasswordForm(request.user)
