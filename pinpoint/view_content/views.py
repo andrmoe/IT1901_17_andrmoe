@@ -149,6 +149,14 @@ def edit_post(request, post_id):
 
     return render(request, "view_content/edit.html", {'form': form, 'I_am_the_author': I_am_the_author, 'post': post})
 
+def add_category(request):
+	if request.method == 'POST': 
+		get_text = str(request.POST.get('new_cat'))
+		if Category.objects.filter(name=get_text):	
+			return redirect('/')
+		new_category = Category.objects.create(name=get_text)
+	return redirect('/subscriptions/')
+
 
 def my_page(request):
     if not request.user.is_authenticated:
@@ -255,6 +263,23 @@ def subscriptions(request):
                                                                'subscriptions_cat': subscriptions_cat,
                                                                'not_subscribed_authors': not_subscribed_authors,
                                                                'not_subscribed_categories': not_subscribed_categories})
+
+
+def unsubscribe_to_category(request, category_id):
+	category = Category.objects.get(pk=category_id)
+	category.subscribers.remove(request.user)
+	return redirect("/subscriptions/")
+	
+def unsubscribe_to_author(request, author_id):
+	author = User.objects.get(pk=author_id)
+	if not request.user.is_authenticated:
+		return redirect('/')
+	author_subscription = AuthorSubscription.objects.filter(
+										author=author,
+										subscriber = request.user)
+	author_subscription.first().delete()
+	return redirect("/subscriptions/")
+
 
 
 def confirm_delete(request, post_id):
