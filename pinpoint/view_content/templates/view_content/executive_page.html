@@ -2,6 +2,15 @@
 {% block title %}Executive page{% endblock %}
 {% block content %}
 <h2>Excecutive page</h2>
+
+<h5><br>Manage categories</h5>
+
+	<form action="/add_category/" method="post">{% csrf_token %}
+		<label for="new_category">New Category: </label>
+		<input id="new_cat" type="text" name="new_cat" value="{{ new_cat }}">
+		<input type="submit" value="OK">
+	</form>
+
 <br>
 
 {% if needs_approval%}
