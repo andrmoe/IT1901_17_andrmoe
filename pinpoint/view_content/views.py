@@ -47,6 +47,7 @@ def get_author_subscriptions(user):
     else:
         return User.objects.none()
 
+
 def get_author_subscibers(user):
     if user.is_authenticated:
         return User.objects.filter(subscriber__author=user)
@@ -60,6 +61,7 @@ def get_category_subscriptions(user):
     else:
         return Category.objects.none()
 
+
 def is_author_already_subscribed_to_user(author, user):
     if user.is_authenticated:
         subscribed_users = get_author_subscriptions(user)
@@ -68,11 +70,13 @@ def is_author_already_subscribed_to_user(author, user):
                 return True
     return False
 
+
 def user_info(user):
     if user.is_authenticated:
         user_subscriptions = get_author_subscriptions(user).count()
         user_subscribers = get_author_subscibers(user).count()
         return user_subscriptions, user_subscribers
+
 
 def index(request):
     posts = Post.objects.all()
@@ -84,7 +88,7 @@ def index(request):
                             Q(author__username__contains=query) |
                             Q(categories__name__contains=query)
                             ).distinct()
-    return render(request, "view_content/TEMPORARY.html", {'posts': posts.order_by("-date")[:20]})
+    return render(request, "view_content/index.html", {'posts': posts.order_by("-date")[:20]})
 
 
 def create_content(request):
@@ -105,7 +109,7 @@ def create_content(request):
     return render(request, "view_content/create.html", {'form': form})
 
 
-def detailPost(request, post_id ):
+def detail_post(request, post_id ):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'view_content/detailPost.html', {'post': post})
 
@@ -116,9 +120,9 @@ def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     I_am_the_author = has_written(request.user, post)
     if request.method == 'POST':
-        if  is_executive_editor(request.user):
+        if is_executive_editor(request.user):
             form = ExEditorForm(request.POST, instance=post)
-        elif post.editor == request.user:
+        elif post.editor == request.user and post.needs_proofreading:
             form = EditorForm(request.POST, instance=post)
         elif I_am_the_author:
             form = AuthorForm(request.POST, instance=post)
@@ -164,7 +168,7 @@ def executive_page(request):
     needs_approval = Post.objects.filter(needs_approval=True, published=False)
     published = Post.objects.filter(published=True)
     posts = Post.objects.all()
-    other=Post.objects.all().difference(needs_approval).difference(published)
+    other = Post.objects.all().difference(needs_approval).difference(published)
 
     editors = get_group_members('editor')
     selected_value = request.GET.get("selected_value")
@@ -173,12 +177,12 @@ def executive_page(request):
         post = Post.objects.get(id=selected_post)
         post.editor = User.objects.get(username=selected_value)
         post.save()
-    return render(request, "view_content/executive_page.html",{'needs_approval': needs_approval,
-                                                               'published': published,
-                                                               'posts':posts,
-                                                               'other':other,
-                                                               'editors': editors
-                                                               })
+    return render(request, "view_content/executive_page.html", {'needs_approval': needs_approval,
+                                                                'published': published,
+                                                                'posts': posts,
+                                                                'other': other,
+                                                                'editors': editors
+                                                                })
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
@@ -299,6 +303,7 @@ def my_profile(request):
     user = request.user
     user_subscriptions, user_subscribers = user_info(user)
     return render(request, "view_content/my_profile.html", {'user': user, 'user_subscriptions': user_subscriptions,'user_subscribers': user_subscribers })
+
 
 def show_users_profile(request, user_id):
     if not request.user.is_authenticated:
