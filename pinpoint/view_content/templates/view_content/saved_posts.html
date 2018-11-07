@@ -8,7 +8,10 @@
 	<tr><th>Posts</th><th>Author</th></tr>
  		{% for post in saved_posts %}
 	<tr class="pointer" onclick="document.location='/{{ post.id }}'">
-		 <td>{{ post.title }}</td><td> ({{post.author}})</td>
+		 <td>{{ post.title }}</td><td onclick="document.location='/{{ post.id }}'">
+		 	({% for author in post.author.all %}
+							{{ author.username }},
+            {% endfor %})</td>
 	</tr>
  		{% endfor %}
 	</table>
