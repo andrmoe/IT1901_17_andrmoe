@@ -296,6 +296,6 @@ def show_users_profile(request, user_id):
         return redirect("/")
     user = User.objects.get(id=user_id)
     author = is_author(user)
-    already_subscribed = is_author_already_subscribed_to_user(request.user, user)
+    already_subscribed = is_author_already_subscribed_to_user(user, request.user)
     return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author, 'already_subscribed': already_subscribed})
 
