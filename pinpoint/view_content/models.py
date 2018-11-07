@@ -10,9 +10,10 @@ class Post(models.Model):
     needs_proofreading = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
     comment = models.TextField(null=True)
-    categories = models.ManyToManyField('Category', null=True)
+    categories = models.ManyToManyField('Category')
     saved_users = models.ManyToManyField('auth.User', related_name='users')
     needs_approval = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
 
@@ -34,6 +35,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class RoleRequest(models.Model):
     group = models.ForeignKey('auth.Group', on_delete=models.CASCADE)

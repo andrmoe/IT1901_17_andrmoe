@@ -2,8 +2,6 @@ from django.contrib.auth import login, logout, authenticate, update_session_auth
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, UserEditForm
-from django.contrib.auth.models import User
-
 
 
 def register(request):
@@ -33,6 +31,7 @@ def welcome(request):
 def profile(request):
     return redirect("/")
 
+
 def edit_profile(request): 
     initial = request.user.__dict__
     user = request.user
@@ -44,7 +43,7 @@ def edit_profile(request):
             return redirect("/my_profile/")
     else:
         form = UserEditForm(instance=user)
-        return render(request, "view_content/edit_profile.html", {'form':form, 'user': user})
+        return render(request, "view_content/edit_profile.html", {'form': form, 'user': user})
     
 
 def change_password(request):
@@ -57,5 +56,4 @@ def change_password(request):
             return redirect("/my_profile/")
     else:
         form = SetPasswordForm(request.user)
-        return render(request, "view_content/edit_profile.html", {'form':form})
-    
+        return render(request, "view_content/edit_profile.html", {'form': form})

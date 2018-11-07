@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 
-
 urlpatterns = [
     path('', views.index, name="home"),
     path('create/', views.create_content, name="content"),
@@ -17,7 +16,7 @@ urlpatterns = [
     path('request/role/<group_id>', views.request_role),
     path('approve/role/<role_request_id>', views.approve_user_group),
     path('deny/role/<role_request_id>', views.delete_request),
-    path('<post_id>', views.detailPost, name='detail'),
+    path('<post_id>', views.detail_post, name='detail'),
     path('edit/<post_id>/confirm_delete/', views.confirm_delete, name='confirm_delete'),
     path('edit/<post_id>/delete/', views.delete_post, name='delete'),
     path('executive_page/', views.executive_page, name='executive_page'),
