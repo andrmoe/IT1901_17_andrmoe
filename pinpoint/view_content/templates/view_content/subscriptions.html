@@ -2,26 +2,36 @@
 {% block title %}Subscriptions{% endblock %}
 {% block content %}
 	<h2>Subscriptions</h2>
-	<h6><b>Authors</b></h6>
+	<table class="table">
+	<tr><td colspan="2"><b>Authors</b></td></tr>
 	{% for author in subscriptions %}
-		<div>{{ author }}</div>
+		<tr>
+		<td>{{ author }}</td>
 		<td>
 			<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/unsubscribe_author/{{ author.id }}'">					Unsubscribe
 			</button>
 		</td>
+	</tr>
 	{% endfor %}
-	<br>
-	<h6><b>Categories</b></h6>
+	<tr><td colspan="2"><b>Categories</b></td></tr>
 	{% for cat in subscriptions_cat %}
-		<div>{{ cat }}</div>
+		<tr>
+		<td>{{ cat }}</td>
 		<td>
 			<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/unsubscribe_category/{{ cat.id }}'">
 				Unsubscribe
 			</button>
 		</td>
+		</tr>
 	{% endfor %}
+	</table>
+	
+
+	
 	<br>
 	{% if subscribed_content %}
+	<br>
+
 		<table class="table table-hover"> 
 		<tr><th>Posts</th><th>Author</th></tr>
 	 		{% for post in subscribed_content %}

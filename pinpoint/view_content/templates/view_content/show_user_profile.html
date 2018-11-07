@@ -8,7 +8,7 @@
 	{% if author and not already_subscribed %}
 	<td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/subscribe_author/{{ user.id }}'">Subscribe</button></td>
 	{% else %}
-	<td><button class="btn btn-secondary active" disabled>Already subscribed</button></td>
+	<td><button class="btn btn-outline-secondary active" onclick="document.location='/unsubscribe_author/{{ user.id }}'">Unsubscribe</button></td>
 	{% endif %}
 	<tr><td>Followers:</td><td> {{user_subscribers}}</td></tr>
 	<tr><td>Following:</td><td> {{user_subscriptions}}</td></tr>

@@ -66,7 +66,7 @@ def is_author_already_subscribed_to_user(author, user):
     if user.is_authenticated:
         subscribed_users = get_author_subscriptions(user)
         for sub_user in subscribed_users:
-            if sub_user == user:
+            if sub_user == author:
                 return True
     return False
 
