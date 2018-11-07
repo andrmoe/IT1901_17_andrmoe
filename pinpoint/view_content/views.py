@@ -156,7 +156,7 @@ def add_category(request):
         if Category.objects.filter(name=get_text):	
             return redirect('/')
         new_category = Category.objects.create(name=get_text)
-    return redirect('/subscriptions/')
+    return redirect('/executive_page/')
 
 
 def my_page(request):
