@@ -153,10 +153,10 @@ def edit_post(request, post_id):
 def add_category(request):
     if request.method == 'POST':
         get_text = str(request.POST.get('new_cat'))
-		if Category.objects.filter(name=get_text):	
-			return redirect('/')
-		new_category = Category.objects.create(name=get_text)
-	return redirect('/subscriptions/')
+        if Category.objects.filter(name=get_text):	
+            return redirect('/')
+        new_category = Category.objects.create(name=get_text)
+    return redirect('/subscriptions/')
 
 
 def my_page(request):
