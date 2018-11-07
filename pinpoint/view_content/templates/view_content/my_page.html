@@ -86,11 +86,11 @@
 					{{ group }}
 				</td>
 				<td>
-					{% ifequal user.groups.all.0.name group.name %}
+					{% if group in user.groups.all %}
 					Assigned
 					{% else %}
 					<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/request/role/{{ group.id }}'">Request</button>
-					{% endifequal %}
+					{% endif %}
 				</td>
 			</tr>
 		{% endfor %}
