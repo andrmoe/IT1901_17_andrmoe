@@ -154,10 +154,10 @@ def edit_post(request, post_id):
 def add_category(request):
     if request.method == 'POST':
         get_text = str(request.POST.get('new_cat'))
-        if Category.objects.filter(name=get_text):	
+        if Category.objects.filter(name=get_text.strip()):	
             return redirect('/')
         new_category = Category.objects.create(name=get_text)
-    return redirect('/subscriptions/')
+    return redirect('/executive_page/')
 
 
 def my_page(request):
@@ -166,10 +166,13 @@ def my_page(request):
     I_am_editor = is_editor(request.user)
     posts = Post.objects.filter(author=request.user)
     needs_proofreading = Post.objects.filter(needs_proofreading=True)
-    groups = Group.objects.all
+    assigned_to_logged_in_user = needs_proofreading.filter(editor=request.user)
+    groups = Group.objects.all()
     role_requests = RoleRequest.objects.all()
     return render(request, "view_content/my_page.html",
-                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'is_editor': I_am_editor, 'groups': groups, 'role_requests': role_requests})
+                  {'posts': posts, 'needs_proofreading': needs_proofreading, 'is_editor': I_am_editor,
+                   'groups': groups, 'role_requests': role_requests,
+                   'assigned_to_logged_in_user': assigned_to_logged_in_user})
 
 
 def executive_page(request):
@@ -309,6 +312,35 @@ def submit_for_proofreading(request, post_id):
         post.needs_proofreading = True
     post.save()
     return redirect("/my_page/")
+
+
+def submit_for_approval(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if post.editor == request.user:
+        post.needs_approval = True
+        post.needs_proofreading = False
+    post.save()
+    return redirect("/my_page/")
+
+
+def publish(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if is_executive_editor(request.user):
+        post.published = True
+        post.needs_approval = False
+        post.needs_proofreading = False
+    post.save()
+    return redirect("/executive_page/")
+
+
+def back_to_proofreading(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if is_executive_editor(request.user):
+        post.published = False
+        post.needs_approval = False
+        post.needs_proofreading = True
+    post.save()
+    return redirect("/executive_page/")
 
 
 def save_post_to_user(request, post_id):
