@@ -3,6 +3,28 @@
 {% block content %}
 <h2>My Page</h2>
 <br>
+<h4>Posts assigned to me for proofreading</h4>
+<table class="table table-hover">
+	<tr><th>Posts</th><th>Author</th><th></th></tr>
+ 		{% for post in assigned_to_logged_in_user %}
+			<tr class="pointer">
+				<td onclick="document.location='/edit/{{ post.id }}'">{{ post.title }}</td>
+				<td>({% for author in post.author.all %}
+						{{ author.username }},
+					{% endfor %})</td>
+				{% if not post.published %}
+					<td>
+						<center>
+							<button class="btn btn-outline-success btn-sm"
+									onclick="document.location='/submit_for_approval/{{ post.id }}'">Submit for approval
+							</button>
+						</center>
+					</td>
+				{% endif %}
+			</tr>
+ 		{% endfor %}
+	</table>
+<br>
 {% if posts %}
 	<h4>My Posts</h4>
 	<table class="table table-hover">
@@ -14,11 +36,13 @@
 				{{ author.username }},
 			{% endfor %})</td>
 		<td>
+		{% if not post.published and not post.needs_proofreading %}
 			<center>
 				<button class="btn btn-outline-success btn-sm"
 						onclick="document.location='/submit_to_proofreading/{{ post.id }}'">Submit for proofreading
 				</button>
 			</center>
+		{% endif %}
 		</td>
 	</tr>
  		{% endfor %}

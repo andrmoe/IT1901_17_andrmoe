@@ -24,6 +24,9 @@ urlpatterns = [
     path('executive_page/', views.executive_page, name='executive_page'),
     path('my_profile/', views.my_profile, name='my_profile'),
     path('submit_to_proofreading/<post_id>', views.submit_for_proofreading),
+    path('submit_for_approval/<post_id>', views.submit_for_approval),
+    path('publish/<post_id>', views.publish),
+    path('back_to_proofreading/<post_id>', views.back_to_proofreading),
     path('profile/<user_id>', views.show_users_profile, name='view_profile'),
     path('add_category/', views.add_category, name='add_category')
 ]

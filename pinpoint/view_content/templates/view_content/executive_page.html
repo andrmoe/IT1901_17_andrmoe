@@ -8,7 +8,7 @@
 	<form action="/add_category/" method="post">{% csrf_token %}
 		<label for="new_category">New Category: </label>
 		<input id="new_cat" type="text" name="new_cat" value="{{ new_cat }}">
-		<input type="submit" value="OK">
+		<input class="btn btn-outline-primary" type="submit" value="OK">
 	</form>
 
 <br>
@@ -17,7 +17,7 @@
 <h4>Needs Approval</h4>
 <table class="table table-hover">
 <tr>
-	<th>Posts</th><th>Author</th><th><center>Editor</center></th>
+	<th>Posts</th><th>Author</th><th><center>Editor</center></th><th></th><th></th>
 </tr>	
 	{% for post in needs_approval %}
 		<tr>
@@ -29,6 +29,16 @@
                                         							{% endfor %})</td>
 			<td>
 				<center>{{ post.editor }}</center>
+			</td>
+			<td>
+				<button class="btn btn-outline-success btn-sm"
+						onclick="document.location='/publish/{{ post.id }}'">Publish
+				</button>
+			</td>
+			<td>
+				<button class="btn btn-outline-success btn-sm"
+						onclick="document.location='/back_to_proofreading/{{ post.id }}'">Back to proofreading
+				</button>
 			</td>
 		</tr>
 	{% endfor %}
