@@ -54,6 +54,14 @@ def get_category_subscriptions(user):
     else:
         return Category.objects.none()
 
+def is_author_already_subscribed_to_user(author, user):
+    if user.is_authenticated:
+        subscribed_users = get_author_subscriptions(user)
+        for sub_user in subscribed_users:
+            if sub_user == user:
+                return True
+    return False
+
 
 def index(request):
     posts = Post.objects.all()
@@ -288,5 +296,6 @@ def show_users_profile(request, user_id):
         return redirect("/")
     user = User.objects.get(id=user_id)
     author = is_author(user)
-    return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author})
+    already_subscribed = is_author_already_subscribed_to_user(user, request.user)
+    return render(request, "view_content/show_user_profile.html", {'user': user, 'author': author, 'already_subscribed': already_subscribed})
 
