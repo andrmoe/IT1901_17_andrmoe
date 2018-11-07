@@ -4,13 +4,32 @@
 <h2> My profile </h2>
 <br>
 <table class="table borderless">
-	<tr><td>Username:</td><td>{{user.username}}</td></tr>
-	<tr><td>Firstname:</td><td>{{user.first_name}}</td></tr>
-	<tr><td>Surname:</td><td>{{user.last_name}}</td></tr>
-	<tr><td>Email:</td><td>{{user.email}}</td></tr>
-	<tr><td>Following:</td><td>{{user_subscriptions}}</td></tr>
-	<tr><td>Followers:</td><td>{{user_subscribers}}</td></tr>
-	<tr><td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/accounts/my_profile/edit/'">Edit info</button></td><td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/accounts/my_profile/change_password/'">Change password</button></td></tr>
+	<tr><td>Username:</td><td colspan="2">{{user.username}}</td></tr>
+	<tr><td>Firstname:</td><td colspan="2">{{user.first_name}}</td></tr>
+	<tr><td>Surname:</td><td colspan="2">{{user.last_name}}</td></tr>
+	<tr><td>Email:</td><td colspan="2">{{user.email}}</td></tr>
+	<tr><td>Following:</td><td colspan="2">{{user_subscriptions}}</td></tr>
+	<tr><td>Followers:</td><td colspan="2">{{user_subscribers}}</td></tr>
+	{% for group in groups %}
+		<tr><td>{{ group }}</td>
+		{% if group in user.groups.all %}
+		<td colspan="2">
+			yes
+		</td>
+		{% else %}
+		<td><button onclick="document.location='/request/role/{{ group.id }}'" class="btn btn-outline-secondary btn-sm">Request role</button></td>
+			{% for role in role_request %}
+				{% ifequal user role.user %}
+				{% ifequal group role.group %}
+					<td>Request pending</td>
+				{% endifequal %}
+				{% endifequal %}
+			{% endfor %}
+		
+		{% endif %}
+		</tr>
+	{% endfor %}
+	<tr><td><button class="btn btn-sm btn-outline-primary" onclick="document.location='/accounts/my_profile/edit/'">Edit info</button></td><td colspan="2"><button class="btn btn-sm btn-outline-primary" onclick="document.location='/accounts/my_profile/change_password/'">Change password</button></td></tr>
 </table>
 
 {% endblock %}

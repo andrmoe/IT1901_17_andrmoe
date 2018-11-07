@@ -78,6 +78,7 @@ def user_info(user):
         return user_subscriptions, user_subscribers
 
 
+
 def index(request):
     posts = Post.objects.all()
     query = request.GET.get("q")
@@ -213,7 +214,11 @@ def delete_request(request, role_request_id):
 def request_role(request, group_id):
     if not request.user.is_authenticated:
         return redirect('/')
+    role_requests = RoleRequest.objects.all()
     the_group = Group.objects.get(id=group_id)
+    for role in role_requests:
+        if role.user == request.user and role.group == the_group:
+            return redirect("/my_page/")
     role_request = RoleRequest(group=the_group, user=request.user)
     role_request.save()
     return redirect("/my_page/")
@@ -328,7 +333,19 @@ def my_profile(request):
         return redirect("/")
     user = request.user
     user_subscriptions, user_subscribers = user_info(user)
-    return render(request, "view_content/my_profile.html", {'user': user, 'user_subscriptions': user_subscriptions,'user_subscribers': user_subscribers })
+    editor = is_editor(user)
+    author = is_author(user)
+    executive_editor = is_executive_editor(user)
+    groups = Group.objects.all
+    role_request = RoleRequest.objects.all()
+    return render(request, "view_content/my_profile.html", {'user': user, 
+                                                            'user_subscriptions': user_subscriptions,
+                                                            'user_subscribers': user_subscribers,
+                                                            'editor': editor,
+                                                            'author': author,
+                                                             'executive_editor': executive_editor,
+                                                             'groups': groups,
+                                                             'role_request': role_request})
 
 
 def show_users_profile(request, user_id):
