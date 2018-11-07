@@ -2,16 +2,15 @@ from django.forms.models import modelform_factory
 from django.forms import Textarea
 from django.forms import CheckboxSelectMultiple
 from .models import Post
-from django.contrib.auth.models import User
 
 
-AuthorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading', 'categories', 'author'],
+AuthorForm = modelform_factory(Post, fields=['title', 'body', 'categories', 'author'],
                              widgets={'body': Textarea(attrs={'cols': 100, 'rows': 25}),
                                       'categories': CheckboxSelectMultiple(),
                                       'author': CheckboxSelectMultiple()})
 
 
-EditorForm = modelform_factory(Post, fields=['title', 'body', 'needs_proofreading', 'needs_approval', 'categories', 'comment'],
+EditorForm = modelform_factory(Post, fields=['title', 'body', 'categories', 'needs_proofreading', 'needs_approval', 'comment'],
                              widgets={'body': Textarea(attrs={'cols': 100, 'rows': 25}),
                                       'categories': CheckboxSelectMultiple()})
 
