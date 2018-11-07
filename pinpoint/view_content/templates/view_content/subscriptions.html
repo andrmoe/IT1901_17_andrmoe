@@ -5,11 +5,20 @@
 	<h6><b>Authors</b></h6>
 	{% for author in subscriptions %}
 		<div>{{ author }}</div>
+		<td>
+			<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/unsubscribe_author/{{ author.id }}'">					Unsubscribe
+			</button>
+		</td>
 	{% endfor %}
 	<br>
 	<h6><b>Categories</b></h6>
 	{% for cat in subscriptions_cat %}
 		<div>{{ cat }}</div>
+		<td>
+			<button class="btn btn-outline-secondary btn-sm" onclick="document.location='/unsubscribe_category/{{ cat.id }}'">
+				Unsubscribe
+			</button>
+		</td>
 	{% endfor %}
 	<br>
 	{% if subscribed_content %}
