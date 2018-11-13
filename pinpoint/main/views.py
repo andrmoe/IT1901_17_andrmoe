@@ -5,6 +5,7 @@ from .forms import SignUpForm, UserEditForm
 
 
 def register(request):
+    """Shows a register form."""
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -20,19 +21,23 @@ def register(request):
 
 
 def logout_view(request):
+    """Logs the user out. Redirects to /accounts/login"""
     logout(request)
     return redirect('/accounts/login')
 
 
 def welcome(request):
+    """Redirects to /accounts/profile"""
     return redirect("/accounts/profile")
 
 
 def profile(request):
+    """Redirects to / (index)"""
     return redirect("/")
 
 
-def edit_profile(request): 
+def edit_profile(request):
+    """Lets user change their personal information."""
     initial = request.user.__dict__
     user = request.user
     if request.method == 'POST':
@@ -47,6 +52,7 @@ def edit_profile(request):
     
 
 def change_password(request):
+    """Lets the user change their password"""
     initial = request.user.__dict__
     if request.method == 'POST':
         form = SetPasswordForm(request.user, data=request.POST)

@@ -78,8 +78,8 @@ def user_info(user):
         return user_subscriptions, user_subscribers
 
 
-
 def index(request):
+    """The home page, shows the 20 latest posts."""
     posts = Post.objects.all()
     query = request.GET.get("q")
     if query:
@@ -93,6 +93,7 @@ def index(request):
 
 
 def create_content(request):
+    """Page for creating a new post as an author"""
     if not request.user.is_authenticated:
         return redirect('/')
     if not is_author(request.user):
@@ -110,12 +111,15 @@ def create_content(request):
     return render(request, "view_content/create.html", {'form': form})
 
 
-def detail_post(request, post_id ):
+def detail_post(request, post_id):
+    """Show the post with id 'post_id'"""
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'view_content/detailPost.html', {'post': post})
 
 
 def edit_post(request, post_id):
+    """Lets the user edit the post with id 'post_id' if they are one of the authors,
+    the assigned editor or an executive editor."""
     if not request.user.is_authenticated:
         return redirect('/')
     post = get_object_or_404(Post, id=post_id)
@@ -152,6 +156,7 @@ def edit_post(request, post_id):
 
 
 def add_category(request):
+    """This view handles the creation of a category through a POST request. redirects the user to /executive_page/"""
     if request.method == 'POST':
         get_text = str(request.POST.get('new_cat'))
         if Category.objects.filter(name=get_text.strip()):	
@@ -161,6 +166,8 @@ def add_category(request):
 
 
 def my_page(request):
+    """Shows the user their own posts, post they are editor for, posts that need proofreading, along with a link to
+    edit these. My page in addition lets the user request a new role and the admin to approve or deny these."""
     if not request.user.is_authenticated:
         return redirect('/')
     I_am_editor = is_editor(request.user)
@@ -176,6 +183,8 @@ def my_page(request):
 
 
 def executive_page(request):
+    """Lets an executive editor approve and publish post or send them back for proofreading.
+    They can also unpublish a post, assign an editor and add a new category."""
     if not is_executive_editor(request.user):
         return redirect("/")
     needs_approval = Post.objects.filter(needs_approval=True, published=False)
@@ -199,6 +208,7 @@ def executive_page(request):
 
 
 def assign_post_editor_to_logged_in_user(request, post_id):
+    """This view sets the editor of a post to the logged in user. Redirects to /my_page/"""
     if not request.user.is_authenticated:
         return redirect('/')
     if is_editor(request.user):
@@ -209,12 +219,15 @@ def assign_post_editor_to_logged_in_user(request, post_id):
 
 
 def delete_request(request, role_request_id):
+    """This view deletes the role request with id 'role_request_id'"""
     role_request = RoleRequest.objects.get(id=role_request_id)
     role_request.delete()
     return redirect('/my_page/')
 
 
 def request_role(request, group_id):
+    """This request creates a role request for the logged in user to the group with id 'group_id'.
+    Redirects to /my_page/"""
     if not request.user.is_authenticated:
         return redirect('/')
     role_requests = RoleRequest.objects.all()
@@ -228,6 +241,8 @@ def request_role(request, group_id):
 
 
 def approve_user_group(request, role_request_id):
+    """This view accepts a role request by adding the requesting user to the requested group,
+    then deleting the request. Redirects to /my_page/"""
     if not request.user.is_authenticated and request.user.is_superuser:
         return redirect('/')
     role_request = RoleRequest.objects.get(id=role_request_id)
@@ -242,6 +257,7 @@ def approve_user_group(request, role_request_id):
 
 
 def subscribe_to_author(request, author_id):
+    """This view allows the user to subscribe to the author (user) with id 'author_id'. Redirects to /subscriptions/"""
     if not request.user.is_authenticated:
         return redirect('/')
     author = User.objects.get(pk=author_id)
@@ -252,6 +268,7 @@ def subscribe_to_author(request, author_id):
 
 
 def subscribe_to_category(request, category_id):
+    """This view allows the user to subscribe to the category with id 'category_id'. Redirects to /subscriptions/"""
     if not request.user.is_authenticated:
         return redirect('/')
     category = Category.objects.get(pk=category_id)
@@ -260,6 +277,8 @@ def subscribe_to_category(request, category_id):
 
 
 def subscriptions(request):
+    """Shows the user's subscriptions and content form the user's subscriptions.
+    Also lets the user subscribe or unsubscribe to authors and categories."""
     if not request.user.is_authenticated:
         return redirect('/')
     subscribed_content = get_subscribed_content(request.user)
@@ -275,23 +294,29 @@ def subscriptions(request):
 
 
 def unsubscribe_to_category(request, category_id):
-	category = Category.objects.get(pk=category_id)
-	category.subscribers.remove(request.user)
-	return redirect("/subscriptions/")
-	
-def unsubscribe_to_author(request, author_id):
-	author = User.objects.get(pk=author_id)
-	if not request.user.is_authenticated:
-		return redirect('/')
-	author_subscription = AuthorSubscription.objects.filter(
-										author=author,
-										subscriber = request.user)
-	author_subscription.first().delete()
-	return redirect("/subscriptions/")
+    """Removes the subscription from the logged in user to the category with id 'category_id' if it exists.
+    Redirects to /subscriptions/"""
+    category = Category.objects.get(pk=category_id)
+    category.subscribers.remove(request.user)
+    return redirect("/subscriptions/")
 
+
+def unsubscribe_to_author(request, author_id):
+    """Removes the subscription from the logged in user to the author (user) with id 'author_id' if it exists.
+    Redirects to /subscriptions/"""
+    author = User.objects.get(pk=author_id)
+    if not request.user.is_authenticated:
+        return redirect('/')
+    author_subscription = AuthorSubscription.objects.filter(
+                                        author=author,
+                                        subscriber = request.user)
+    author_subscription.first().delete()
+    return redirect("/subscriptions/")
 
 
 def confirm_delete(request, post_id):
+    """Promts the user with a dialog box asking to confirm that they want to delete the post with id 'post_id'.
+    The user can click 'Yes, delete it' or 'No, keep it'."""
     post = Post.objects.get(id=post_id)
     if has_written(request.user, post):
         return render(request, "view_content/confirm_delete.html", {'post': post})
@@ -300,6 +325,7 @@ def confirm_delete(request, post_id):
 
 
 def delete_post(request, post_id):
+    """Lets an author delete their own post with id 'post_id'. Redirects to /my_page/"""
     post = Post.objects.get(id=post_id)
     if has_written(request.user, post):
         post.delete()
@@ -307,6 +333,7 @@ def delete_post(request, post_id):
 
 
 def submit_for_proofreading(request, post_id):
+    """Sends a post to proofreading. Redirects to /my_page/"""
     post = Post.objects.get(id=post_id)
     if has_written(request.user, post):
         post.needs_proofreading = True
@@ -315,6 +342,7 @@ def submit_for_proofreading(request, post_id):
 
 
 def submit_for_approval(request, post_id):
+    """Sends a post to be approved by an executive editor. Redirects to /my_page/"""
     post = Post.objects.get(id=post_id)
     if post.editor == request.user:
         post.needs_approval = True
@@ -324,6 +352,7 @@ def submit_for_approval(request, post_id):
 
 
 def publish(request, post_id):
+    """Publishes the post with id 'post_id'. Redirects to /executive_page/"""
     post = Post.objects.get(id=post_id)
     if is_executive_editor(request.user):
         post.published = True
@@ -334,6 +363,7 @@ def publish(request, post_id):
 
 
 def back_to_proofreading(request, post_id):
+    """sends the post with id 'post_id' back to proofreading. Redirects to /executive_page/"""
     post = Post.objects.get(id=post_id)
     if is_executive_editor(request.user):
         post.published = False
@@ -344,6 +374,7 @@ def back_to_proofreading(request, post_id):
 
 
 def save_post_to_user(request, post_id):
+    """Lets user save the post with id 'post_id' so they can read it later."""
     post = Post.objects.get(id=post_id)
     if request.user.is_authenticated:
         post.saved_users.add(request.user)
@@ -351,16 +382,19 @@ def save_post_to_user(request, post_id):
 
 
 def get_saved_content(user):
-        return Post.objects.filter(saved_users=user).order_by('-date')
+    """Return a queryset of the post that the user has saved, in reverse chronological order"""
+    return Post.objects.filter(saved_users=user).order_by('-date')
 
 
 def view_saved_content(request):
+    """Displays all posts that the user has saved."""
     if not request.user.is_authenticated:
         return redirect("/")
     return render(request, "view_content/saved_posts.html", {'saved_posts': get_saved_content(request.user)})
 
 
 def my_profile(request):
+    """Displays the user's personal information."""
     if not request.user.is_authenticated:
         return redirect("/")
     user = request.user
@@ -381,6 +415,7 @@ def my_profile(request):
 
 
 def show_users_profile(request, user_id):
+    """Displays the public information about the user with id 'user_id'."""
     if not request.user.is_authenticated:
         return redirect("/")
     user = User.objects.get(id=user_id)

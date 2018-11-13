@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'view_content',
     'main',
+    'django.contrib.admindocs',
 ]
 
 MIDDLEWARE = [
